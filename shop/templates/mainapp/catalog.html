@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Catalog</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+</head>
+<body>
+    <div class="container">
+       
+        <div class="top">
+            <div class="header">
+                <a href="/" title="Главная">
+                    <img class="logo" src="{% static 'img/temp_logo.png'%}" alt="logo">
+                </a>
+                
+                <ul class="main-menu">
+                    <li class="menu-item"><a class="menu-item" href="/">Главная</a></li>
+                    <li class="menu-item"><a class="menu-item" href="/catalog/">Каталог</a></li>
+                    <li class="menu-item"><a class="menu-item" href="/contacts/">Контакты</a></li>
+                </ul>
+            </div>
+            
+            <div class="content">
+                <h2 class="ctg-header">Каталог</h2>
+                <div class="ctg-items">
+                    <div class="ctg-item">
+                        <a href="#">
+                            <img class="img-preview" src="https://img.amiami.com/images/product/main/173/FIGURE-033444.jpg" alt="product image" title="Hunter">
+                            <p class="ctg-item-name">Hunter</p>
+                        </a>
+                    </div>
+                    <div class="ctg-item">
+                        <a href="#">
+                            <img class="img-preview" src="https://img.amiami.com/images/product/main/184/FIGURE-043897.jpg" alt="product image" title="Holy Knight Neptune">
+                            <p class="ctg-item-name">Holy Knight Neptune</p>
+                        </a>
+                    </div>
+                    <div class="ctg-item">
+                        <a href="#">
+                            <img class="img-preview" src="https://img.amiami.com/images/product/main/172/FIGURE-030776.jpg" alt="product image" title="Siegmeyer of Catarina">
+                            <p class="ctg-item-name">Siegmeyer of Catarina</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p class="copyright">&copy; Все права защищены.</p>
+        </div>
+    </div>
+</body>
+</html>
