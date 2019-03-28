@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+        <title>Test online shop</title>
+    {% endblock %}
+    {% block css %}
+        <link rel="stylesheet" href="{% static 'css/styles.css'%}">
+    {% endblock %}
+</head>
+<body>
+
+    <div class="container">
+        <div class="top">
+            {% include 'mainapp/includes/header.html' %}
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="footer">
+            {% block footer %}
+                <p class="copyright">&copy; Все права защищены.</p>
+            {% endblock %}
+        </div>
+    </div>
+
+    {% block script %}
+    {% endblock %}
+</body>
+</html>

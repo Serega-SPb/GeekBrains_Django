@@ -1,0 +1,19 @@
+{% load static %}
+<div class="header">
+    <a href="{% url 'index' %}" title="{{ 'Главная'|title }}">
+        <img class="logo" src="{% static 'img/temp_logo.png'%}" alt="logo">
+    </a>
+
+    <ul class="main-menu">
+        {% for item in menu_items %}
+            <li class="menu-item {% if item.link in request.resolver_match.url_name %} menu-active
+                        {% endif %}">
+                <a href="{% url item.link %}"
+                   class="menu-item {% if item.link in request.resolver_match.url_name  %} menu-active
+                        {% endif %}">
+                    {{ item.name|title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

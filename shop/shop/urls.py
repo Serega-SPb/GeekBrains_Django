@@ -19,7 +19,11 @@ import mainapp.views as mainapp
 
 urlpatterns = [
     url('admin/', admin.site.urls),
-    url('^$', mainapp.main),
-    url('catalog/', mainapp.catalog),
-    url('contacts/', mainapp.contacts),
+    url('^$', mainapp.main, name='index'),
+    url('catalog$', mainapp.catalog, name='catalog'),
+    url('catalog0', mainapp.catalog, name='catalog0'),
+    url('catalog1', mainapp.catalog, name='catalog1'),
+    url('catalog2', mainapp.catalog, name='catalog2'),
+    url('contacts', mainapp.contacts, name='contacts'),
+    url('^product', mainapp.product, name='product')
 ]

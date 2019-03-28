@@ -1,0 +1,41 @@
+{% extends 'mainapp/base.html' %}
+
+{% block title %}
+    <title>{{ name }}</title>
+{% endblock %}
+
+{% block content %}
+    <div class="content pr-content">
+        <h2 class="pr-block pr-head-block">{{ name|upper }}</h2>
+        <div class="pr-block pr-img-block">
+            <a href="{{ img }}" target="_blank">
+                <img class="pr-img" src="{{ img }}" alt="product image">
+            </a>
+        </div>
+        <div class="pr-block pr-desc-block">
+            <h3 class="pr-header">Характеристики товара</h3>
+            <table class="pr-spec-table">
+                <tbody>
+                    {% for key, value in properties.items %}
+                        <tr>
+                            <td class="pr-td">{{ key }}</td>
+                            <td class="pr-td">{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pr-block pr-buy-block">
+            <p class="price">{{ price }}</p>
+            <button class="buy-btn" value="Купить">
+                <h2>КУПИТЬ</h2>
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+    <p class="copyright-ami">Продукт и описание взяты с сайта &nbsp;
+        <a href="https://www.amiami.com">https://www.amiami.com</a></p>
+{% endblock %}
