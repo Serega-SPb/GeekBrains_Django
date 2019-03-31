@@ -1,36 +1,8 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Test online shop</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
-</head>
-<body>
-    <div class="container">
-        <div class="top">
-            <div class="header">
-                
-                <a href="/" title="Главная">
-                    <img class="logo" src="{% static 'img/temp_logo.png'%}" alt="logo">
-                </a>
-                
-                <ul class="main-menu">
-                    <li class="menu-item"><a class="menu-item" href="/">Главная</a></li>
-                    <li class="menu-item"><a class="menu-item" href="/catalog/">Каталог</a></li>
-                    <li class="menu-item"><a class="menu-item" href="/contacts/">Контакты</a></li>
-                </ul>
-            </div>
-            
-            <div class="content">
-                <h2>Test online shop</h2>
-                <p>Temp welcome message</p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p class="copyright">&copy; Все права защищены.</p>
-        </div>
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+    <div class="content">
+        <h2>Test online shop</h2>
+        <p>Temp welcome message</p>
     </div>
-</body>
-</html>
+{% endblock %}

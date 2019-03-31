@@ -57,6 +57,12 @@ li.menu-item:hover{
 a.menu-item:hover{
     color: white;
 }
+li.menu-active{
+    background: blue;
+}
+a.menu-active{
+    color: white;
+}
 .logo{
     margin-left: 25px;
     border-radius: 50%;
@@ -83,6 +89,7 @@ a.menu-item:hover{
 
 /*------catalog------*/
 .ctg-header{
+    margin: 20px 0;
     text-align: center;
     font-family: arial
 }
@@ -110,7 +117,49 @@ a.menu-item:hover{
     font-weight: 600;
     margin: 5px;
 }
+.categories {
+    display: flex;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    list-style-type: none;
+    padding-bottom: 20px;
+    position: relative;
+}
+.categories::after{
+    content: "";
+    width: 300px;
+    position: absolute;
+    top: 43px;
+    left: 0px;
+}
 
+.cat-link {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    color: #6c6c6c;
+    padding-left: 5px;
+    padding-right: 15px;
+}
+.cat-link:hover{
+    color: #212121;
+    font-weight: 700;
+    padding-bottom: 10px;
+}
+.cat-active {
+    color: #212121;
+    font-weight: 700;
+    padding-bottom: 10px;
+    padding-left: 9px;
+
+}
+.cat-bd:hover{
+    border-bottom: 3px solid #6c6c6c;
+}
+.cat-bd-active{
+    border-bottom: 3px solid #212121;
+}
 /*------product------*/
 .pr-content{
     display: flex;
@@ -124,6 +173,7 @@ a.menu-item:hover{
 }
 .pr-head-block{
     width: 100%;
+    margin: 20px 0;
 }
 .pr-img-block{
     flex-grow: 0;
@@ -137,6 +187,7 @@ a.menu-item:hover{
     outline: 0px
 }
 .pr-header{
+margin: 20px 0;
     color: black;
     font-size: 18px;
     font-weight: 400;
@@ -175,8 +226,8 @@ p.capit-letter::first-letter{
     border-collapse: collapse;
     padding: 3px;
 }
-.pr-spec-td{
-    border: 1px solid black;
+.pr-td{
+    border-bottom: 1px solid black;
     padding: 3px;
 }
 .pr-desc-block{

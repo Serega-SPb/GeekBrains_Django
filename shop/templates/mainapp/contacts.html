@@ -1,60 +1,34 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Contacts</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css'%}">
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <a href="/" title="Главная">
-                <img class="logo" src="{% static 'img/temp_logo.png'%}" alt="logo">
-            </a>
-            
-            <ul class="main-menu">
-                <li class="menu-item"><a class="menu-item" href="/">Главная</a></li>
-                <li class="menu-item"><a class="menu-item" href="/catalog/">Каталог</a></li>
-                <li class="menu-item"><a class="menu-item" href="/contacts/">Контакты</a></li>
-            </ul>
-        </div>
-        
-        <div class="top">
-            <div class="content cont-content">
-                <div class="cont-feedback">
-                    <h3>Напишите нам</h3>
-                    <form action="#">
-                        
-                        <span>Имя</span>
-                        <input class="cont-input cont-text" type="text" placeholder="Name" required> <br>
-                        <span>Email</span>
-                        <input class="cont-input cont-email" type="email" placeholder="example@mail.com" required> <br>
-                        <span>Тема</span>
-                        <input class="cont-input cont-text" type="text" placeholder="Message subject"> <br>
-                        <textarea class="cont-mes cont-text" placeholder="Message" required></textarea> <br>
-                
-                        <input type="submit" class="cont-btn" value="Submit">
-                        <input type="reset" class="cont-btn" value="Clear">
-                    </form>
-                    <br>
-                </div>
-                <div class="cont-address">
-                    <h3>Адрес</h3>
-                    <p>Контактный номер телефона: <a href="tel:+79991111111">+7(999)111-11-11</a> <br>
-                    Email: <a href="mailto:testshop@temp.com">testshop@temp.com</a> <br>
-                    Адрес:
-                        <a href="https://yandex.ru/maps/?um=constructor%3Ad75a8a952d30c21d5d624e4e84264c9472701751168d1d7a4fc6d03fdad147d1&source=constructorLink" target="_blank">
-                            Россия, Санкт-Петербург, Ленинский проспект, 100к1
-                        </a> <br>
-                        <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Ad75a8a952d30c21d5d624e4e84264c9472701751168d1d7a4fc6d03fdad147d1&amp;source=constructor" width="100%" height="374px" frameborder="1"></iframe>
-                    </p>
-                </div>
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+    <div class="content cont-content">
+        <div class="cont-feedback">
+                <h3>Напишите нам</h3>
+                <form action="#">
+
+                    <span>Имя</span>
+                    <input class="cont-input cont-text" type="text" placeholder="Name" required> <br>
+                    <span>Email</span>
+                    <input class="cont-input cont-email" type="email" placeholder="example@mail.com" required> <br>
+                    <span>Тема</span>
+                    <input class="cont-input cont-text" type="text" placeholder="Message subject"> <br>
+                    <textarea class="cont-mes cont-text" placeholder="Message" required></textarea> <br>
+
+                    <input type="submit" class="cont-btn" value="Submit">
+                    <input type="reset" class="cont-btn" value="Clear">
+                </form>
+                <br>
             </div>
-        </div>
-        <div class="footer">
-                <p class="copyright">&copy; Все права защищены.</p>
+            <div class="cont-address">
+                <h3>Адрес</h3>
+                <p>Контактный номер телефона: <a href="tel:+79991111111">+7(999)111-11-11</a> <br>
+                Email: <a href="mailto:testshop@temp.com">testshop@temp.com</a> <br>
+                Адрес:
+                    <a href="https://yandex.ru/maps/?um=constructor%3Ad75a8a952d30c21d5d624e4e84264c9472701751168d1d7a4fc6d03fdad147d1&source=constructorLink" target="_blank">
+                        Россия, Санкт-Петербург, Ленинский проспект, 100к1
+                    </a> <br>
+                    <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Ad75a8a952d30c21d5d624e4e84264c9472701751168d1d7a4fc6d03fdad147d1&amp;source=constructor" width="100%" height="374px" frameborder="1"></iframe>
+                </p>
             </div>
     </div>
-</body>
-</html>
+{% endblock %}
