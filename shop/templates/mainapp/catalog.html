@@ -2,20 +2,21 @@
 
 {% block content %}
     <div class="content">
-        <h2 class="ctg-header">{{ page_name }}</h2>
+        <h2 class="ctg-header">{{ menu_items.1.name|title }}</h2>
         <ul class="categories">
             {% for cat in categories %}
                 <li>
-                    <a href="{% url cat.link %}" class="cat-link cat-bd {% if request.resolver_match.url_name == cat.link %} cat-active cat-bd-active {% endif %}">
-                        {{ cat.name }}</a>
+                    <a href="{% url 'catalog' cat.id %}"
+                       class="cat-link cat-bd {% if cat.id|lower in request.path %} cat-active cat-bd-active {% endif %}">
+                        {{ cat.title }}</a>
                 </li>
             {% endfor %}
         </ul>
         <div class="ctg-items">
             {% for item in items %}
                 <div class="ctg-item">
-                    <a href="{% url 'product' %}_{{item.id}}">
-                        <img class="img-preview" src="{{ item.img }}" alt="product image" title="{{ item.name }}">
+                    <a href="{% url 'product' item.id %}">
+                        <img class="img-preview" src="{{ item.image.url }}" alt="product image" title="{{ item.name }}">
                         <p class="ctg-item-name">{{ item.name }}</p>
                     </a>
                 </div>
