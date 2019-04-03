@@ -8,15 +8,15 @@
     <div class="content pr-content">
         <h2 class="pr-block pr-head-block">{{ name|upper }}</h2>
         <div class="pr-block pr-img-block">
-            <a href="{{ img }}" target="_blank">
-                <img class="pr-img" src="{{ img }}" alt="product image">
+            <a href="{{ image.url }}" target="_blank">
+                <img class="pr-img" src="{{ image.url }}" alt="product image">
             </a>
         </div>
         <div class="pr-block pr-desc-block">
             <h3 class="pr-header">Характеристики товара</h3>
             <table class="pr-spec-table">
                 <tbody>
-                    {% for key, value in properties.items %}
+                    {% for key, value in properties %}
                         <tr>
                             <td class="pr-td">{{ key }}</td>
                             <td class="pr-td">{{ value }}</td>
