@@ -1,0 +1,43 @@
+{% load static %}
+<div class="header">
+    <a href="{% url 'index' %}" title="{{ 'Главная'|title }}">
+        <img class="logo" src="{% static 'img/temp_logo.png'%}" alt="logo">
+    </a>
+
+    <div class="right-side">
+        <ul class="auth">
+            {% if user.is_authenticated %}
+                <li class="auth-menu">
+                    <a href="{% url 'auth:view' %}" class="auth-menu">{{ user.username|title }}</a>
+                </li>
+                <li class="auth-menu">
+                    <a href="{% url 'auth:logout' %}" class="auth-menu">Log out</a>
+                </li>
+            {% else %}
+                <li class="auth-menu">
+                    <a href="{% url 'auth:register' %}" class="auth-menu">Register</a>
+                </li>
+                <li class="auth-menu">
+                    <a href="{% url 'auth:login' %}" class="auth-menu">Log in</a>
+                </li>
+            {% endif %}
+
+        </ul>
+        <ul class="main-menu">
+        {% for item in menu_items %}
+            <li class="menu-item
+                {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
+                    menu-active
+                {% endif %}">
+                <a href="{% url item.link %}"
+                   class="menu-item
+                   {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
+                        menu-active
+                   {% endif %}">
+                    {{ item.name|title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    </div>
+</div>

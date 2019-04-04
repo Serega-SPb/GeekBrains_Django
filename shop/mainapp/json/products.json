@@ -1,0 +1,47 @@
+[{
+		"id": 1,
+		"name": "Bloodborne: Hunter Figma",
+		"img": "Product_images/FIGURE-033444.jpg",
+		"price": "8800",
+		"Release Date": "Jun-2018",
+		"properties": {
+			"JAN code": "4545784065105",
+			"Brand": "Max Factory",
+			"Series Title": "Bloodborne",
+			"Size": "Approx. H150mm (non-scale)",
+			"Sculptor": "monolith"
+		}
+
+	},
+	{
+		"id": 2,
+		"name": "Holy Knight Neptune Complete Figure",
+		"img": "Product_images/FIGURE-043897.jpg",
+		"price": "15984",
+		"Release Date": "Apr-2019",
+		"properties": {
+			"JAN code": "4571498441171",
+			"Series Title": "CYBER DIMENSION NEPTUNE",
+			"Size": "Approx. 215mm",
+			"Scale": "1/7",
+			"Sculptor": "Seiji Miyashiro"
+		}
+
+	},
+	{
+		"id": 3,
+		"name": "DARK SOULS - Siegmeyer of Catarina Statue",
+		"img": "Product_images/FIGURE-030776.jpg",
+		"price": "36800",
+		"Release Date": "Oct-2017",
+		"properties": {
+			"JAN code": "4589962544853",
+			"Brand": "Gecco",
+			"Series Title": "DARK SOULS",
+			"Size": "Approx. H37cm (Siegmeyer figure: Approx. 33cm)",
+			"Scale": "1/6",
+			"Sculptor": "Shinya Akao HEADLONG"
+		}
+
+	}
+]

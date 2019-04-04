@@ -23,6 +23,9 @@ body{
 }
 .content{
     margin: 50px 0px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 /*------header------*/
 .header{
@@ -46,10 +49,10 @@ li.menu-item{
     background-color: lightgray
 }
 a.menu-item{
-    font-size: 20px;
+    font-size: 1.3em;
     text-decoration: none;
     color: blue;
-    padding: 5px 10px;
+    padding: 7px 10px;
 }
 li.menu-item:hover{
     background: blue;
@@ -67,6 +70,45 @@ a.menu-active{
     margin-left: 25px;
     border-radius: 50%;
 }
+
+/*------header auth------*/
+
+.auth {
+    list-style-type: none;
+    align-self: flex-end;
+    margin-right: 50px;
+}
+
+.right-side {
+    min-height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+li.auth-menu{
+    display: inline;
+    margin: 15px;
+    padding: 5px;
+}
+a.auth-menu {
+    font-size: 1.2em;
+    color: black;
+    border: 1px solid black;
+    background-color: whitesmoke;
+    font-weight: 550;
+    text-decoration: none;
+    padding: 0px 5px;
+}
+
+a.auth-menu:hover{
+    color: blue;
+}
+a.auth-menu:active{
+    background-color: black;
+    color: white;
+}
+
 /*------footer------*/
 .footer{
     display: flex;
@@ -303,4 +345,162 @@ p.capit-letter::first-letter{
 .cont-btn{
     width: 125px;
     height: 25px
+}
+
+/*------login------*/
+.login-win {
+    margin: 20px auto;
+    z-index: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    border: 2px solid black;
+    border-radius: 30px;
+    max-width: 350px;
+    max-height: 500px;
+}
+
+.login-header {
+    background-color: blue;
+    color: white;
+    display: flex;
+    justify-content: center;
+    border: 2px solid black;
+    padding: 5px;
+    margin: -2px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.login-btn {
+    margin: -2px;
+    padding: 10px;
+    border: 2px solid black;
+    box-sizing: border-box;
+    background-color: lightgray;
+    font-size: 1.1em;
+}
+.login-btn:hover{
+    background-color: darkgray;
+}
+.login-btn:active{
+    background-color: gray;
+    color: white;
+}
+
+.login-content {
+    margin: 35px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-block {
+    margin: 5px;
+    align-self: center;
+    min-width: 100%;
+}
+
+.login-block label{
+    font-size: 1.2em;
+    padding-left: 5px;
+}
+
+.login-block input{
+    font-size: 1.2em;
+    margin-top: 15px;
+    margin-bottom: 10px;
+    min-width: 100%;
+}
+
+.login-urls {
+    display: flex;
+    align-self: stretch;
+    justify-content: space-between;
+    font-size: 0.9em;
+}
+
+/*------registration------*/
+
+.reg-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.reg-btn {
+    align-self: flex-start;
+    margin: 20px 50px;
+    padding: 5px 15px;
+}
+
+.reg-flds {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 15px;
+}
+
+.reg-fld{
+    min-width: 250px;
+    margin: 15px 20px;
+}
+
+.reg-fld:nth-child(2n) {
+    margin-right: 40%;
+}
+
+/*------profile------*/
+
+.profile {
+    display: flex;
+}
+
+.avatar-img {
+    outline: 1px solid black;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.profile-block {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+}
+.profile-block td{
+    padding: 15px;
+}
+
+.avatar-block {
+    display: flex;
+    flex-direction: column;
+    margin-right: 15px;
+}
+
+.profile-edit {
+    text-decoration: none;
+    font-weight: 600;
+    color: black;
+    margin: 0 10px;
+    padding: 5px 10px;
+    align-self: flex-start;
+    border: 1px solid black;
+    background-color: lightgray;
+}
+.profile-edit:hover{
+    background-color: gray;
+}
+.profile-edit:active{
+    color: white;
+    background-color: black;
+}
+
+.profile-btns {
+    margin: 25px;
 }

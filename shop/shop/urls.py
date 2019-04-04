@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import url
+from django.urls import include
 import mainapp.views as mainapp
 from django.conf import settings
 from django.conf.urls.static import static
@@ -22,10 +23,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     url('admin/', admin.site.urls),
     url('^$', mainapp.main, name='index'),
-    url('^catalog$', mainapp.catalog, name='catalog'),
-    url(r'^catalog/(?P<cat_id>\d+)', mainapp.catalog, name='catalog'),
-    url(r'^product_(?P<id>\d+)', mainapp.product, name='product'),
-    url('contacts', mainapp.contacts, name='contacts'),
+    url('^catalog/', include('mainapp.urls', namespace='catalog')),
+    url('^auth/', include('authapp.urls', namespace='auth')),
+    url('contacts', mainapp.contacts, name='contacts')
 ]
 
 if settings.DEBUG:
