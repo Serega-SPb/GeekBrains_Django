@@ -6,7 +6,7 @@ from .models import *
 def base():
     return {'menu_items': [
         {'name': 'Главная', 'link': 'index'},
-        {'name': 'Каталог', 'link': 'catalog'},
+        {'name': 'Каталог', 'link': 'catalog:index', 'namespace': 'catalog'},
         {'name': 'Контакты', 'link': 'contacts'},
     ]}
 
@@ -29,17 +29,25 @@ def catalog(request, cat_id=None):
     return render(request, 'mainapp/catalog.html', context=context)
 
 
+def get_props(prop):
+    return {
+        'JAN': prop.jan_code,
+        'Size': prop.size,
+        'Scale': prop.scale,
+        'Brand': prop.brand,
+        'Serial': prop.serial,
+        'Sculptor': prop.sculptor}
+
+
 def product(request, id):
 
     context = base()
-
     product = Product.objects.filter(id=id)[0]
     context['name'] = product.name
     context['image'] = product.image
     context['price'] = product.price
     context['release'] = product.release
-    temp = list(product.properties.__dict__.items())[2:-1]
-    context['properties'] = list([(k, v) for k, v in temp if k != 'NULL' and v != 'NULL'])
+    context['properties'] = list([(k, v) for k, v in get_props(product.properties).items() if k and v ])
 
     return render(request, 'mainapp/product.html', context=context)
 

@@ -4,23 +4,23 @@ from django.db import models
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=64, unique=True, verbose_name='Name')
+    name = models.CharField(max_length=64, unique=True)
 
-    def __set__(self):
+    def __str__(self):
         return self.name
 
 
 class Serial(models.Model):
-    title = models.CharField(max_length=64, unique=True, verbose_name='Title')
+    name = models.CharField(max_length=64, unique=True)
 
-    def __set__(self):
-        return self.title
+    def __str__(self):
+        return self.name
 
 
 class Sculptor(models.Model):
-    name = models.CharField(max_length=64, unique=True, verbose_name='Name')
+    name = models.CharField(max_length=64, unique=True)
 
-    def __set__(self):
+    def __str__(self):
         return self.name
 
 
@@ -32,8 +32,8 @@ class ProductProperties(models.Model):
     serial = models.ForeignKey(Serial, on_delete=models.SET_NULL, null=True, blank=True)
     sculptor = models.ForeignKey(Sculptor, on_delete=models.SET_NULL, null=True, blank=True)
 
-    def __set__(self):
-        return self.jan_code
+    def __str__(self):
+        return str(self.jan_code)
 
 
 class Product(models.Model):
@@ -43,7 +43,7 @@ class Product(models.Model):
     release = models.DateField()
     properties = models.ForeignKey(ProductProperties, on_delete=models.SET_NULL, null=True, blank=True)
 
-    def __set__(self):
+    def __str__(self):
         return self.name
 
 

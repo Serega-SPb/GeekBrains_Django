@@ -1,0 +1,39 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+    <div class="content">
+        <div class="login-win">
+           <div class="login-header">
+                <h2 class="login-lbl">Authorization</h2>
+           </div>
+            <form class="login-form" action="{% url 'auth:login' %}" method="post">
+                {% csrf_token %}
+                <div class="login-content">
+
+                    <div class="login-block">
+                       {{ login_form.username.label_tag }}
+                       {{ login_form.username }}
+                    </div>
+
+                    <div class="login-block">
+                        {{ login_form.password.label_tag }}
+                        {{ login_form.password }}
+                    </div>
+
+<!--                    {% if login_form.errors %}-->
+<!--                    <div class="login-block">-->
+<!--                        {{ login_form.errors }}-->
+<!--                    </div>-->
+<!--                    {% endif %}-->
+
+                    <div class="login-urls">
+                        <a href="{%url 'auth:register' %}">Registration</a>
+                        <a href="#" onclick="alert('Feature is not realised')">Forget password</a>
+                    </div>
+
+                </div>
+                <button class="login-btn" type="submit">Log in</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

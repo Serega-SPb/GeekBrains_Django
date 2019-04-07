@@ -1,0 +1,60 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+    <div class="content">
+
+        <form action="{% url 'auth:edit' %}" method="post">
+            <div class="profile">
+                {% csrf_token %}
+                <div class="avatar-block">
+                    {%if is_edit == 'True' %}
+                        <img class="avatar-img" src="{{ user.avatar.url }}" alt="avatar">
+                        {{edit_form.avatar}}
+                        {{edit_form.avatar.errors}}
+                    {%else%}
+                        <img class="avatar-img" src="{{ user.avatar.url }}" alt="avatar">
+                    {%endif%}
+                </div>
+                <table class="profile-block">
+                    <tbody>
+                        <tr>
+                            <td>Username</td>
+                            <td>
+                                {%if is_edit == 'True' %} {{edit_form.username}} {{edit_form.username.errors}}
+                                {%else%} {{user.username}}
+                                {%endif%}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>
+                                {%if is_edit == 'True' %} {{edit_form.email}} {{edit_form.email.errors}}
+                                {%else%} {{user.email}}
+                                {%endif%}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Age</td>
+                            <td>
+                                {%if is_edit == 'True' %} {{edit_form.age}} {{edit_form.age.errors}}
+                                {%else%} {{user.age}}
+                                {%endif%}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="profile-btns">
+                <a href="#" class="profile-edit" onclick="alert('Feature is not released')">Change password</a>
+                {%if is_edit == 'True' %}
+                    <button type="submit" class="profile-edit">Save profile</button>
+                    <button type="reset" class="profile-edit">Reset</button>
+                    <a href="{% url 'auth:view' %}" class="profile-edit">Back</a>
+                {%else%}
+                    <a href="{% url 'auth:edit' %}" class="profile-edit">Edit profile</a>
+                {%endif%}
+            </div>
+        </form>
+
+    </div>
+{% endblock %}
