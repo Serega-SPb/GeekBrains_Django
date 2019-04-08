@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from authapp.forms import *
 from django.contrib import auth
 from django.urls import reverse
+from shopcartapp.models import ShopCart
 # Create your views here.
 
 
@@ -11,6 +12,10 @@ def base():
         {'name': 'Каталог', 'link': 'catalog:index', 'namespace': 'catalog'},
         {'name': 'Контакты', 'link': 'contacts'},
     ]}
+
+
+def user_product_count(user):
+    return {'products_count': ShopCart.objects.filter(user=user).count()}
 
 
 def login(request):
@@ -60,6 +65,8 @@ def edit(request):
         edit_form = ShopUserEditForm(instance=request.user)
 
     context = base()
+    if request.user and request.user.is_active:
+        context.update(user_product_count(request.user))
     context['edit_form'] = edit_form
     context['is_edit'] = 'True'
     return render(request, 'authapp/profile.html', context=context)
@@ -67,5 +74,7 @@ def edit(request):
 
 def view(request):
     context = base()
+    if request.user and request.user.is_active:
+        context.update(user_product_count(request.user))
     context['is_edit'] = 'False'
     return render(request, 'authapp/profile.html', context=context)

@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import *
+from shopcartapp.models import ShopCart
 # Create your views here.
 
 
@@ -11,19 +12,27 @@ def base():
     ]}
 
 
+def user_product_count(user):
+    return {'products_count': ShopCart.objects.filter(user=user).count()}
+
+
 def main(request):
-    return render(request, 'mainapp/index.html', context=base())
+    context = base()
+    if request.user and request.user.is_active:
+        context.update(user_product_count(request.user))
+    return render(request, 'mainapp/index.html', context=context)
 
 
 def catalog(request, cat_id=None):
-
     context = base()
+    if request.user and request.user.is_active:
+        context.update(user_product_count(request.user))
     context['cat_id'] = cat_id
     context['categories'] = Serial.objects.all()
     if cat_id and int(cat_id) > 0:
-        cat = Serial.objects.filter(id=cat_id)[0]
-        prop = ProductProperties.objects.filter(serial=cat)[0]
-        context['items'] = [Product.objects.filter(properties=prop)[0]]
+        cat = get_object_or_404(Serial, id=cat_id)
+        props = ProductProperties.objects.filter(serial=cat).all()
+        context['items'] = Product.objects.filter(properties__in=props).all()
     else:
         context['items'] = Product.objects.all()
     return render(request, 'mainapp/catalog.html', context=context)
@@ -39,19 +48,30 @@ def get_props(prop):
         'Sculptor': prop.sculptor}
 
 
-def product(request, id):
+def gety_product_info(product):
+    return {
+        'id': product.id,
+        'name': product.name,
+        'image': product.image,
+        'price': product.price,
+        'release': product.release,
+        'properties': list([(k, v) for k, v in get_props(product.properties).items() if k and v ])
+    }
 
+
+def product(request, id):
     context = base()
-    product = Product.objects.filter(id=id)[0]
-    context['name'] = product.name
-    context['image'] = product.image
-    context['price'] = product.price
-    context['release'] = product.release
-    context['properties'] = list([(k, v) for k, v in get_props(product.properties).items() if k and v ])
+    if request.user and request.user.is_active:
+        context.update(user_product_count(request.user))
+    product = Product.objects.filter(id=id).first()
+    context.update(gety_product_info(product))
 
     return render(request, 'mainapp/product.html', context=context)
 
 
 def contacts(request):
-    return render(request, 'mainapp/contacts.html', context=base())
+    context = base()
+    if request.user and request.user.is_active:
+        context.update(user_product_count(request.user))
+    return render(request, 'mainapp/contacts.html', context=context)
 

@@ -1,0 +1,62 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="content">
+        <h2 class="cart-header">Shopping cart</h2>
+        {%if cart_items|length > 0 %}
+        <table class="cart-tbl">
+            <tbody>
+                <tr>
+                    <th class="cart-col cart-col-num">#</th>
+                    <th class="cart-col cart-col-name">Name</th>
+                    <th class="cart-col cart-col-count">Quantity</th>
+                    <th class="cart-col cart-col-price">Price</th>
+                    <th class="cart-col cart-col-price">Total price</th>
+                </tr>
+                {%for item in cart_items%}
+                    <tr>
+                        <td class="cart-col cart-col-num">{{ forloop.counter }}</td>
+                        <td class="cart-col cart-col-name">{{ item.product }}</td>
+                        <td class="cart-col cart-col-count">
+                            <a class="cart-count-btn" href="{% url 'shopcart:add' item.product.id %}"
+                                style="background-image: url({% static 'img/add.svg'%})"></a>
+                            {{ item.quantity }}
+                            <a class="cart-count-btn" href="{% url 'shopcart:remove' item.product.id %}"
+                                style="background-image: url({% static 'img/remove.svg'%})"></a>
+                        </td>
+                        <td class="cart-col cart-col-price">{{ item.product.price }}</td>
+                        <td id="price" class="cart-col cart-col-price">{{ item.total_price }}</td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <p class="cart-total-price">
+           <b>Total:&nbsp;</b><span id="total" onload="calc_total_price()"></span>&nbsp;&#165;
+        </p>
+        {% else %}
+            <p class="cart-empty">EMPTY</p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", calc_total_price);
+
+    function calc_total_price()
+    {
+        var total_price = 0.00;
+        var items = document.getElementsByClassName('cart-col-price');
+        for (i = 0; i<items.length; i++){
+            var item = items[i];
+            if (item.id === "price"){
+                total_price += parseFloat(item.textContent);
+            }
+        }
+        if (total_price > 0){
+            document.getElementById('total').textContent = total_price.toFixed(2);
+        }
+    }
+</script>
+{% endblock %}
