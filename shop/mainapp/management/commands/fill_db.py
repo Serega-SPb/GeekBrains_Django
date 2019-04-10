@@ -43,8 +43,8 @@ class Command(BaseCommand):
         products = load_from_json('products')
         clear_db()
 
-        all = Serial(id=0, name='All')
-        all.save()
+        # all = Serial(id=0, name='All')
+        # all.save()
         for pr in products:
             props = pr['properties']
 

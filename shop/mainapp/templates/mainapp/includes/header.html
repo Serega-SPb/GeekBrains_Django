@@ -5,6 +5,16 @@
     </a>
 
     <div class="right-side">
+        <div class="profile-line">
+            {% if user.is_authenticated %}
+                <a class="cart-info" href="{% url 'shopcart:cart' %}">
+                    <img width="15px" height="15px " src="{% static 'img/shopping-cart.svg' %}" alt="cart">
+                    {%if products_count > 0%}
+                        ({{ products_count }})
+                    {% endif %}
+                    &nbsp;Shop cart
+                </a>
+            {% endif %}
         <ul class="auth">
             {% if user.is_authenticated %}
                 <li class="auth-menu">
@@ -23,6 +33,7 @@
             {% endif %}
 
         </ul>
+        </div>
         <ul class="main-menu">
         {% for item in menu_items %}
             <li class="menu-item

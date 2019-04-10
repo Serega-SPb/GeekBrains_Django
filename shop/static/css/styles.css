@@ -74,8 +74,9 @@ a.menu-active{
 /*------header auth------*/
 
 .auth {
+    margin-left: auto;
     list-style-type: none;
-    align-self: flex-end;
+    align-self: center;
     margin-right: 50px;
 }
 
@@ -105,6 +106,35 @@ a.auth-menu:hover{
     color: blue;
 }
 a.auth-menu:active{
+    background-color: black;
+    color: white;
+}
+
+/*------profile line ------*/
+
+.profile-line{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.cart-info{
+    text-decoration: none;
+    font-size: 1.2em;
+    margin-left: 20px;
+    align-self: center;
+    border: 1px solid black;
+    padding: 2px 5px;
+    color: black;
+    background-color: whitesmoke;
+}
+
+.cart-info:hover{
+    color: blue;
+}
+
+.cart-info:active{
     background-color: black;
     color: white;
 }
@@ -149,16 +179,39 @@ a.auth-menu:active{
     width: 200px;
     height: 200px;
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: center
 }
 .ctg-item-name{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     text-align: center;
     width: 150px;
     color: mediumblue;
     font-weight: 600;
-    margin: 5px;
+    margin: 5px 0;
 }
+.ctg-buy {
+    min-width: 25px;
+    min-height: 25px;
+    margin: 0 5px;
+    background-color: gold;
+    border: 1px solid black;
+    text-decoration: none;
+    border-radius: 5px;
+    background-image: url(../img/shopping-cart.svg);
+    background-repeat: no-repeat;
+}
+.ctg-buy:hover {
+    background-color: yellow;
+}
+
+.ctg-buy:active{
+    background-color: darkgoldenrod;
+}
+
 .categories {
     display: flex;
     margin-top: 50px;
@@ -290,7 +343,11 @@ p.capit-letter::first-letter{
     height: 75px;
     background: gold;
     border-radius: 25px;
-    border-style: outset
+    border-style: outset;
+    text-decoration: none;
+    color: black;
+    text-align: center;
+    line-height: 75px;
 }
 .buy-btn:active{
     border-style: inset;
@@ -503,4 +560,72 @@ p.capit-letter::first-letter{
 
 .profile-btns {
     margin: 25px;
+}
+
+/*------shopping cart------*/
+
+.cart-tbl {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 25px;
+}
+
+.cart-col{
+    text-align: center;
+    border: 1px solid black;
+    padding: 10px;
+    font-size: 1.1em;
+}
+
+.cart-col-num{
+    width: 1%;
+}
+
+.cart-col-name{
+    width: 50%;
+}
+
+.cart-col-count{
+    width: 5%;
+}
+
+.cart-col-price{
+    width: 10%;
+}
+
+td.cart-col-price::after{
+    content: " \00A5";
+}
+
+.cart-header {
+    text-align: center;
+}
+
+.cart-total-price {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 50px;
+    font-size: 1.5em;
+}
+
+.cart-empty{
+    text-align: center;
+    margin: 25px;
+    font-style: italic;
+    opacity: 0.2;
+    font-size: 2em;
+}
+.cart-count-btn {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    text-decoration: none;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.cart-count-btn:hover{
+    background-color: gray;
+}
+.cart-count-btn:active{
+    background-color: black;
 }

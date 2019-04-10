@@ -4,6 +4,12 @@
     <div class="content">
         <h2 class="ctg-header">{{ menu_items.1.name|title }}</h2>
         <ul class="categories">
+            <li>
+                <a href="{% url 'catalog:filter' 0 %}"
+                   class="cat-link cat-bd {% if '0' in request.path %} cat-active cat-bd-active {% endif %}">
+                    All
+                </a>
+            </li>
             {% for cat in categories %}
                 <li>
                     <a href="{% url 'catalog:filter' cat.id %}"
@@ -17,7 +23,11 @@
                 <div class="ctg-item">
                     <a href="{% url 'catalog:product' item.id %}">
                         <img class="img-preview" src="{{ item.image.url }}" alt="product image" title="{{ item.name }}">
-                        <p class="ctg-item-name">{{ item.name }}</p>
+                        <div class="ctg-item-name">
+                            <p>{{ item.name }}</p>
+                            <a class="ctg-buy" href="{%url 'shopcart:add' item.id%}" onclick="alert('Added in cart')"></a>
+                        </div>
+
                     </a>
                 </div>
             {% endfor %}

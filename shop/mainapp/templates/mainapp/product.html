@@ -27,9 +27,9 @@
         </div>
         <div class="pr-block pr-buy-block">
             <p class="price">{{ price }}</p>
-            <button class="buy-btn" value="Купить">
+            <a class="buy-btn" href="{%url 'shopcart:add' id %}" onclick="alert('Added in cart')">
                 <h2>КУПИТЬ</h2>
-            </button>
+            </a>
         </div>
     </div>
 {% endblock %}
