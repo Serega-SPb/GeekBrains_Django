@@ -1,7 +1,6 @@
 from datetime import datetime
 from django.core.management.base import BaseCommand
 from mainapp.models import *
-from django.contrib.auth.models import User
 import json
 import os
 
@@ -29,9 +28,9 @@ def clear_db():
 def get_prop(prop_name, props):
 
     if prop_name in props:
-        p = models[prop_name].objects.filter(name=props.get(prop_name))
+        p = models[prop_name].objects.filter(name=props.get(prop_name).title())
         if p.exists():
-            result = p
+            result = p.first()
         else:
             result = models[prop_name](name=props.get(prop_name).title())
             result.save()
@@ -43,8 +42,6 @@ class Command(BaseCommand):
         products = load_from_json('products')
         clear_db()
 
-        # all = Serial(id=0, name='All')
-        # all.save()
         for pr in products:
             props = pr['properties']
 
@@ -59,7 +56,7 @@ class Command(BaseCommand):
             properties.save()
 
             product = Product(name=pr['name'],
-                              image=pr['img'],
+                              image=f'Product_images//{pr["img"]}',
                               price=pr['price'],
                               release=datetime.strptime(pr['Release Date'], '%b-%Y').date(),
                               properties=properties)

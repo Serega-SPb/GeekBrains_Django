@@ -37,6 +37,7 @@ body{
     background-image: url(../img/background.png);
 }
 ul.main-menu{
+    align-self: flex-end;
     margin-right: 50px;
     list-style-type: none;
     vertical-align: bottom;
@@ -175,9 +176,13 @@ a.auth-menu:active{
     display: flex;
     flex-wrap: wrap;
 }
+.ctg-hot {
+    display: flex;
+    justify-content: space-around
+}
 .ctg-item{
     width: 200px;
-    height: 200px;
+    align-self: self-start;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -194,6 +199,7 @@ a.auth-menu:active{
     margin: 5px 0;
 }
 .ctg-buy {
+    align-self: flex-start;
     min-width: 25px;
     min-height: 25px;
     margin: 0 5px;
@@ -593,6 +599,11 @@ p.capit-letter::first-letter{
     width: 10%;
 }
 
+.cart-col-remove{
+    width: 1%;
+    border: none;
+}
+
 td.cart-col-price::after{
     content: " \00A5";
 }
@@ -628,4 +639,14 @@ td.cart-col-price::after{
 }
 .cart-count-btn:active{
     background-color: black;
+}
+
+.cart-remove{
+    text-decoration: none;
+    font-weight: 700;
+    color: darkred;
+}
+
+.cart-remove:hover{
+    color: red;
 }

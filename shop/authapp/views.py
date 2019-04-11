@@ -1,8 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
 from authapp.forms import *
 from django.contrib import auth
 from django.urls import reverse
-from shopcartapp.models import ShopCart
 # Create your views here.
 
 
@@ -14,12 +14,14 @@ def base():
     ]}
 
 
-def user_product_count(user):
-    return {'products_count': ShopCart.objects.filter(user=user).count()}
+def get_user_cart_info(user):
+    return {'products_count': user.Cart.first().total_quantity,
+            'products_total_cost': user.Cart.first().total_cost}
 
 
 def login(request):
     login_form = ShopUserLoginForm(data=request.POST)
+    next = request.GET['next'] if 'next' in request.GET.keys() else ''
     if request.method == 'POST' and login_form.is_valid():
         username = request.POST['username']
         password = request.POST['password']
@@ -27,10 +29,13 @@ def login(request):
         user = auth.authenticate(username=username, password=password)
         if user and user.is_active:
             auth.login(request, user)
-            return HttpResponseRedirect(reverse('index'))
-
+            if 'next' in request.POST.keys():
+                return HttpResponseRedirect(request.POST['next'])
+            else:
+                return HttpResponseRedirect(reverse('index'))
     context = base()
     context['login_form'] = login_form
+    context['next'] = next
     return render(request, 'authapp/login.html', context=context)
 
 
@@ -55,6 +60,7 @@ def register(request):
     return render(request, 'authapp/register.html', context)
 
 
+@login_required
 def edit(request):
     if request.method == 'POST':
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
@@ -66,15 +72,16 @@ def edit(request):
 
     context = base()
     if request.user and request.user.is_active:
-        context.update(user_product_count(request.user))
+        context.update(get_user_cart_info(request.user))
     context['edit_form'] = edit_form
     context['is_edit'] = 'True'
     return render(request, 'authapp/profile.html', context=context)
 
 
+@login_required
 def view(request):
     context = base()
     if request.user and request.user.is_active:
-        context.update(user_product_count(request.user))
+        context.update(get_user_cart_info(request.user))
     context['is_edit'] = 'False'
     return render(request, 'authapp/profile.html', context=context)

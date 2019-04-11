@@ -14,7 +14,9 @@
 
     <div class="container">
         <div class="top">
-            {% include 'mainapp/includes/header.html' %}
+            <div class="header">
+                {% include 'mainapp/includes/header.html' %}
+            </div>
             {% block content %}
             {% endblock %}
         </div>

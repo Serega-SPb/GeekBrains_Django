@@ -1,54 +1,53 @@
 {% load static %}
-<div class="header">
-    <a href="{% url 'index' %}" title="{{ 'Главная'|title }}">
-        <img class="logo" src="{% static 'img/temp_logo.png'%}" alt="logo">
-    </a>
 
-    <div class="right-side">
-        <div class="profile-line">
-            {% if user.is_authenticated %}
-                <a class="cart-info" href="{% url 'shopcart:cart' %}">
-                    <img width="15px" height="15px " src="{% static 'img/shopping-cart.svg' %}" alt="cart">
-                    {%if products_count > 0%}
-                        ({{ products_count }})
-                    {% endif %}
-                    &nbsp;Shop cart
-                </a>
-            {% endif %}
-        <ul class="auth">
-            {% if user.is_authenticated %}
-                <li class="auth-menu">
-                    <a href="{% url 'auth:view' %}" class="auth-menu">{{ user.username|title }}</a>
-                </li>
-                <li class="auth-menu">
-                    <a href="{% url 'auth:logout' %}" class="auth-menu">Log out</a>
-                </li>
-            {% else %}
-                <li class="auth-menu">
-                    <a href="{% url 'auth:register' %}" class="auth-menu">Register</a>
-                </li>
-                <li class="auth-menu">
-                    <a href="{% url 'auth:login' %}" class="auth-menu">Log in</a>
-                </li>
-            {% endif %}
+<a href="{% url 'index' %}" title="{{ 'Главная'|title }}">
+    <img class="logo" src="{% static 'img/temp_logo.png'%}" alt="logo">
+</a>
 
-        </ul>
-        </div>
-        <ul class="main-menu">
-        {% for item in menu_items %}
-            <li class="menu-item
-                {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
-                    menu-active
-                {% endif %}">
-                <a href="{% url item.link %}"
-                   class="menu-item
-                   {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
-                        menu-active
-                   {% endif %}">
-                    {{ item.name|title }}
-                </a>
+<div class="right-side">
+    <div class="profile-line">
+        {% if user.is_authenticated %}
+            <a class="cart-info" href="{% url 'shopcart:cart' %}">
+                <img width="15px" height="15px " src="{% static 'img/shopping-cart.svg' %}" alt="cart">
+                {%if user.Cart.first and user.Cart.first.total_quantity > 0%}
+                       ({{ user.Cart.first.total_quantity }}) -  {{ user.Cart.first.total_cost }} &#165;
+                {% endif %}
+                &nbsp;Shop cart
+            </a>
+        {% endif %}
+    <ul class="auth">
+        {% if user.is_authenticated %}
+            <li class="auth-menu">
+                <a href="{% url 'auth:view' %}" class="auth-menu">{{ user.username|title }}</a>
             </li>
-        {% endfor %}
+            <li class="auth-menu">
+                <a href="{% url 'auth:logout' %}" class="auth-menu">Log out</a>
+            </li>
+        {% else %}
+            <li class="auth-menu">
+                <a href="{% url 'auth:register' %}" class="auth-menu">Register</a>
+            </li>
+            <li class="auth-menu">
+                <a href="{% url 'auth:login' %}" class="auth-menu">Log in</a>
+            </li>
+        {% endif %}
+
     </ul>
     </div>
+    <ul class="main-menu">
+    {% for item in menu_items %}
+        <li class="menu-item
+            {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
+                menu-active
+            {% endif %}">
+            <a href="{% url item.link %}"
+               class="menu-item
+               {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
+                    menu-active
+               {% endif %}">
+                {{ item.name|title }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
 </div>

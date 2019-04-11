@@ -2,7 +2,16 @@
 
 {% block content %}
     <div class="content">
-        <h2>Test online shop</h2>
-        <p>Temp welcome message</p>
+        <h2 class="ctg-header">Random product</h2>
+        <div class="ctg-item">
+            <a href="{% url 'catalog:product' product.id %}">
+                <img class="img-preview" src="{{ product.image.url }}" alt="product image" title="{{ product.name }}">
+                <div class="ctg-item-name">
+                    <p>{{ item.name }}</p>
+                    <a class="ctg-buy" href="{%url 'shopcart:add' product.id%}"></a>
+                </div>
+
+            </a>
+        </div>
     </div>
 {% endblock %}

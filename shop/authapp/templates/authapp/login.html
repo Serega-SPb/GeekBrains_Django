@@ -8,6 +8,10 @@
            </div>
             <form class="login-form" action="{% url 'auth:login' %}" method="post">
                 {% csrf_token %}
+                {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                {% endif %}
+
                 <div class="login-content">
 
                     <div class="login-block">
