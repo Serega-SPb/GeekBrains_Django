@@ -1,6 +1,6 @@
+import random
 from django.shortcuts import render, get_object_or_404
 from .models import *
-from shopcartapp.models import ShopCart
 # Create your views here.
 
 
@@ -12,21 +12,14 @@ def base():
     ]}
 
 
-def user_product_count(user):
-    return {'products_count': ShopCart.objects.filter(user=user).count()}
-
-
 def main(request):
     context = base()
-    if request.user and request.user.is_active:
-        context.update(user_product_count(request.user))
+    context['product'] = context['hot_items'] = random.sample(list(Product.objects.all()), 1)[0]
     return render(request, 'mainapp/index.html', context=context)
 
 
 def catalog(request, cat_id=None):
     context = base()
-    if request.user and request.user.is_active:
-        context.update(user_product_count(request.user))
     context['cat_id'] = cat_id
     context['categories'] = Serial.objects.all()
     if cat_id and int(cat_id) > 0:
@@ -35,6 +28,7 @@ def catalog(request, cat_id=None):
         context['items'] = Product.objects.filter(properties__in=props).all()
     else:
         context['items'] = Product.objects.all()
+        context['hot_items'] = random.sample(list(Product.objects.all()), 3)[:3]
     return render(request, 'mainapp/catalog.html', context=context)
 
 
@@ -61,8 +55,6 @@ def gety_product_info(product):
 
 def product(request, id):
     context = base()
-    if request.user and request.user.is_active:
-        context.update(user_product_count(request.user))
     product = Product.objects.filter(id=id).first()
     context.update(gety_product_info(product))
 
@@ -71,7 +63,5 @@ def product(request, id):
 
 def contacts(request):
     context = base()
-    if request.user and request.user.is_active:
-        context.update(user_product_count(request.user))
     return render(request, 'mainapp/contacts.html', context=context)
 

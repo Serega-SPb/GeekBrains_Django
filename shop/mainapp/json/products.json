@@ -43,5 +43,37 @@
 			"Sculptor": "Shinya Akao HEADLONG"
 		}
 
+	},
+	{
+		"id": 4,
+		"name": "DARK SOULS / Black Knight 1/6 Scale Statue",
+		"img": "FIGURE-045087.jpg",
+		"price": "47200",
+		"Release Date": "Jun-2019",
+		"properties": {
+			"JAN code": "4589962558850",
+			"Brand": "Gecco",
+			"Series Title": "DARK SOULS",
+			"Size": "Approx. H41cm (including base)",
+			"Scale": "1/6",
+			"Sculptor": "Maya Yamaoka"
+		}
+
+	},
+	{
+		"id": 5,
+		"name": "DARK SOULS - Knight of Astora Oscar 1/6 Scale Statue",
+		"img": "FIGURE-032783.jpg",
+		"price": "34880",
+		"Release Date": "Jan-2018",
+		"properties": {
+			"JAN code": "4589962547366",
+			"Brand": "Gecco",
+			"Series Title": "DARK SOULS",
+			"Size": "Approx. H32cm (including base)",
+			"Scale": "1/6",
+			"Sculptor": "Shin Tanabe JINTO"
+		}
+
 	}
 ]

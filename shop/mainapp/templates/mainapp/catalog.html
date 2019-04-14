@@ -25,12 +25,29 @@
                         <img class="img-preview" src="{{ item.image.url }}" alt="product image" title="{{ item.name }}">
                         <div class="ctg-item-name">
                             <p>{{ item.name }}</p>
-                            <a class="ctg-buy" href="{%url 'shopcart:add' item.id%}" onclick="alert('Added in cart')"></a>
+                            <a class="ctg-buy" href="{%url 'shopcart:add' item.id%}"></a>
                         </div>
 
                     </a>
                 </div>
             {% endfor %}
         </div>
+        {% if  hot_items|length > 0 %}
+        <h2 class="ctg-header">Hot products</h2>
+        <div class="ctg-hot">
+            {% for item in hot_items %}
+                <div class="ctg-item">
+                    <a href="{% url 'catalog:product' item.id %}">
+                        <img class="img-preview" src="{{ item.image.url }}" alt="product image" title="{{ item.name }}">
+                        <div class="ctg-item-name">
+                            <p>{{ item.name }}</p>
+                            <a class="ctg-buy" href="{%url 'shopcart:add' item.id%}"></a>
+                        </div>
+
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
     </div>
 {% endblock %}
