@@ -1,0 +1,17 @@
+{% extends 'adminapp/base.html' %}
+
+{% block content %}
+    <div class="content">
+        <h3>Confirm delete</h3>
+        <p> {{ object.username }}</p>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <label for="yes-answer">Yes</label>
+            <input type="radio" id="yes-answer" name="answer" value="Yes">
+            <label for="no-answer">No</label>
+            <input checked type="radio" id="no-answer" name="answer" value="No">
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+{% endblock %}

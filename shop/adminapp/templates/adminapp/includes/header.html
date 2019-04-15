@@ -1,0 +1,20 @@
+{% load static %}
+
+<ul class="menu">
+    {% for item in menu_items %}
+
+    <li class="menu-item
+               {% if item.namespace in request.resolver_match.view_name %}
+                    menu-active
+               {% endif %}">
+        <a href="{% url item.link %}"
+           class="menu-link
+                  {% if item.namespace in request.resolver_match.view_name %}
+                        menu-active
+                  {% endif %}">
+            {{ item.name }}
+        </a>
+    </li>
+
+    {% endfor %}
+</ul>

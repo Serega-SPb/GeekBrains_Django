@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% block title %}
+        <title>Admin panel</title>
+    {% endblock %}
+    {% block css %}
+        <link rel="stylesheet" href="{% static 'css/admin_styles.css'%}">
+    {% endblock %}
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            {% include 'adminapp/includes/header.html' %}
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block script %}
+    {% endblock %}
+</body>
+</html>
