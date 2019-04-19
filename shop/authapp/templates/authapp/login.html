@@ -1,4 +1,5 @@
 {% extends 'mainapp/base.html' %}
+{% load static %}
 
 {% block content %}
     <div class="content">
@@ -24,17 +25,13 @@
                         {{ login_form.password }}
                     </div>
 
-<!--                    {% if login_form.errors %}-->
-<!--                    <div class="login-block">-->
-<!--                        {{ login_form.errors }}-->
-<!--                    </div>-->
-<!--                    {% endif %}-->
-
                     <div class="login-urls">
                         <a href="{%url 'auth:register' %}">Registration</a>
                         <a href="#" onclick="alert('Feature is not realised')">Forget password</a>
                     </div>
-
+                    <div class="login-socials">
+                        <a class="login-google" href="{% url 'social:begin' 'google-oauth2' %}"></a>
+                    </div>
                 </div>
                 <button class="login-btn" type="submit">Log in</button>
             </form>

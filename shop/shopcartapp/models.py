@@ -8,19 +8,22 @@ class ShopCart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
 
+    def get_all(self):
+        return self.user.Cart.select_related('product').all()
+
     @property
     def product_cost(self):
         return self.product.price * self.quantity
 
     @property
     def total_quantity(self):
-        _items = ShopCart.objects.filter(user=self.user)
+        _items = self.get_all()
         _total_quantity = sum(list(map(lambda x: x.quantity, _items)))
         return _total_quantity
 
     @property
     def total_cost(self):
-        _items = ShopCart.objects.filter(user=self.user)
+        _items = self.get_all()
         _total_cost = sum(list(map(lambda x: x.product_cost, _items)))
         return _total_cost
 

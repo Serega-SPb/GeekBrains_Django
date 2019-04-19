@@ -490,6 +490,31 @@ p.capit-letter::first-letter{
     font-size: 0.9em;
 }
 
+.login-socials {
+    display: flex;
+    align-self: stretch;
+    justify-content: flex-start;
+    margin: 15px 10px 0 10px;
+    height: 50px;
+}
+
+.login-google{
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-image: url(../img/google.svg);
+    background-repeat: no-repeat;
+}
+
+.login-google:hover{
+    background-color: lightgray;
+}
+
+.login-google:active{
+    background-color: gray;
+}
+
 /*------registration------*/
 
 .reg-form {
