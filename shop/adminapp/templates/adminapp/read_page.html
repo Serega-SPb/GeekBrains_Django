@@ -1,0 +1,37 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="content">
+
+        <h2>{{ menu_name }} <a class="btn-add" href="{% url create_link %}">+</a></h2>
+        {% csrf_token %}
+        <table id="{{ namespace }}" class="cont-tbl">
+            <tbody>
+                {% for object in object_list %}
+                    <tr id="{{ object.id }}" class="tr-cont">
+                        <td class="td-name {%if not object.is_active %} disable {% endif %}">
+                            {{ object }}</td>
+                        <td class="td-edit">
+                            <a href="{% url update_link object.id %}">Edit</a>
+                        </td>
+                        <td class="td-disable">
+                            <a id="activation" href="#">
+                                {%if object.is_active %} Enabled
+                                {% else %} Disabled
+                                {% endif %}
+                            </a>
+                        </td>
+                        <td class="td remove">
+                            <a href="{% url delete_link object.id %}">Remove</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.3.0.js' %}"></script>
+    <script src="{% static 'js/admin_scripts.js' %}"></script>
+{% endblock %}

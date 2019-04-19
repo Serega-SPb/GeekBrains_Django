@@ -26,7 +26,8 @@ urlpatterns = [
     url('^catalog/', include('mainapp.urls', namespace='catalog')),
     url('^auth/', include('authapp.urls', namespace='auth')),
     url('^shopcart/', include('shopcartapp.urls', namespace='shopcart')),
-    url('contacts', mainapp.contacts, name='contacts')
+    url('contacts', mainapp.contacts, name='contacts'),
+    url('^admin_custom/', include('adminapp.urls', namespace='admin_custom'))
 ]
 
 if settings.DEBUG:
