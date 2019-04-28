@@ -64,4 +64,5 @@ class Command(BaseCommand):
 
         from authapp.models import ShopUser
 
-        ShopUser.objects.create_superuser('root', '', 'qazxsw!2', age=50)
+        ShopUser.objects.create_superuser('django', '', 'geekbrains')
+        ShopUser.objects.create_superuser('root', '', 'qazxsw!2')

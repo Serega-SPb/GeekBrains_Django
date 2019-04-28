@@ -8,5 +8,6 @@ urlpatterns = [
     url('^logout$', views.logout, name='logout'),
     url('^register', views.register, name='register'),
     url('^edit', views.edit, name='edit'),
-    url('^view', views.view, name='view')
+    url('^view', views.view, name='view'),
+    url(r'^verify/(?P<activation_key>\w+)/$', views.verify, name='verify')
 ]

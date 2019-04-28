@@ -80,6 +80,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
+                'mainapp.context_processors.get_main_menu'
             ],
         },
     },
@@ -157,3 +158,16 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'media')
+
+
+DOMAIN_NAME = config.get('email', 'domain')
+
+EMAIL_HOST = config.get('email', 'host')
+EMAIL_PORT = config.get('email', 'port')
+EMAIL_HOST_USER = config.get('email', 'user')
+EMAIL_HOST_PASSWORD = config.get('email', 'password')
+EMAIL_USE_SSL = config.getboolean('email', 'use-ssl')
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = 'tmp/email-messages/'

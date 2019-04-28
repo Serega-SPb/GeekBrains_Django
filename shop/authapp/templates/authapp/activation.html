@@ -1,0 +1,8 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+    <div class="content">
+        <h2>{{ status|capfirst }}</h2>
+        <a href="{%url 'index'%}">Main</a>
+    </div>
+{% endblock %}

@@ -1,17 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect
-from authapp.forms import *
 from django.contrib import auth
 from django.urls import reverse
-# Create your views here.
+from django.core.mail import send_mail
+from django.conf import settings
 
-
-def base():
-    return {'menu_items': [
-        {'name': 'Главная', 'link': 'index'},
-        {'name': 'Каталог', 'link': 'catalog:index', 'namespace': 'catalog'},
-        {'name': 'Контакты', 'link': 'contacts'},
-    ]}
+from .forms import *
+from .models import *
 
 
 def login(request):
@@ -28,9 +23,10 @@ def login(request):
                 return HttpResponseRedirect(request.POST['next'])
             else:
                 return HttpResponseRedirect(reverse('index'))
-    context = base()
-    context['login_form'] = login_form
-    context['next'] = next
+    context = {
+        'login_form': login_form,
+        'next': next
+    }
     return render(request, 'authapp/login.html', context=context)
 
 
@@ -46,12 +42,15 @@ def register(request):
             if not register_form.instance.avatar:
                 register_form.instance.avatar = ''
             user = register_form.save()
-            auth.login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+            if send_verify_mail(user):
+                status = 'сообщение подтверждения отправлено'
+            else:
+                status = 'ошибка отправки сообщения'
+            print(status)
+            return render(request, 'authapp/activation.html', context={'status': status})
     else:
         register_form = ShopUserRegisterForm()
-    context = base()
-    context['register_form'] = register_form
+    context = {'register_form': register_form}
     return render(request, 'authapp/register.html', context)
 
 
@@ -65,14 +64,45 @@ def edit(request):
     else:
         edit_form = ShopUserEditForm(instance=request.user)
 
-    context = base()
-    context['edit_form'] = edit_form
-    context['is_edit'] = 'True'
+    context = {
+        'edit_form': edit_form,
+        'is_edit': 'True',
+    }
     return render(request, 'authapp/profile.html', context=context)
 
 
 @login_required
 def view(request):
-    context = base()
-    context['is_edit'] = 'False'
+    context = {'is_edit': 'False'}
     return render(request, 'authapp/profile.html', context=context)
+
+
+def send_verify_mail(user):
+    code = user.code.code
+    verify_link = reverse('auth:verify', args=[code])
+
+    title = f'Подтверждение учетной записи {user.username}'
+    message = f'Для подтверждения учетной записи {user.username} на портале \
+{settings.DOMAIN_NAME} перейдите по ссылке: \n{settings.DOMAIN_NAME}{verify_link}'
+
+    return send_mail(title, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
+
+
+def verify(request, activation_key):
+    try:
+        user_activation: UserActivation = UserActivation.objects.get(code=activation_key)
+        if user_activation and user_activation.code_is_valid():
+            user = user_activation.user
+            user.is_active = True
+            user.save()
+            auth.login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            user_activation.delete()
+            status = 'Successful'
+        else:
+            status = 'Failure'
+            print(f'error activation by key: {activation_key}')
+    except Exception as e:
+        status = 'Error'
+        print(f'error activation user : {e.args}')
+
+    return render(request, 'authapp/verification.html', context={'status': status})

@@ -1,6 +1,8 @@
+from datetime import timedelta
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.timezone import now
 
 
 def validate_image(image):
@@ -13,3 +15,12 @@ def validate_image(image):
 class ShopUser(AbstractUser):
     avatar = models.ImageField(upload_to='users_avatars', default='users_avatars/default-avatar.jpg')
     age = models.PositiveIntegerField(null=True)
+
+
+class UserActivation(models.Model):
+    user = models.OneToOneField(ShopUser, on_delete=models.CASCADE, primary_key=True, related_name='code')
+    code = models.CharField(max_length=128)
+    expired_to = models.DateTimeField(default=now() + timedelta(days=2))
+
+    def code_is_valid(self):
+        return self.expired_to > now()
