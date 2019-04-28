@@ -9,12 +9,13 @@ def base():
         {'name': 'Главная', 'link': 'index'},
         {'name': 'Каталог', 'link': 'catalog:index', 'namespace': 'catalog'},
         {'name': 'Контакты', 'link': 'contacts'},
+        {'name': 'Admin', 'link': 'admin_custom:index'}
     ]}
 
 
 def main(request):
     context = base()
-    context['product'] = context['hot_items'] = random.sample(list(Product.objects.all()), 1)[0]
+    context['product'] = random.sample(list(Product.objects.all()), 1)[0]
     return render(request, 'mainapp/index.html', context=context)
 
 
@@ -28,7 +29,7 @@ def catalog(request, cat_id=None):
         context['items'] = Product.objects.filter(properties__in=props).all()
     else:
         context['items'] = Product.objects.all()
-        context['hot_items'] = random.sample(list(Product.objects.all()), 3)[:3]
+        context['hot_items'] = random.sample(list(context['items']), 3)[:3]
     return render(request, 'mainapp/catalog.html', context=context)
 
 

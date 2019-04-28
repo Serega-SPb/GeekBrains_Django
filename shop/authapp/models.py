@@ -12,4 +12,4 @@ def validate_image(image):
 
 class ShopUser(AbstractUser):
     avatar = models.ImageField(upload_to='users_avatars', default='users_avatars/default-avatar.jpg')
-    age = models.PositiveIntegerField()
+    age = models.PositiveIntegerField(null=True)

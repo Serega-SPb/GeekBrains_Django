@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load custom_tags %}
 <a href="{% url 'index' %}" title="{{ 'Главная'|title }}">
     <img class="logo" src="{% static 'img/temp_logo.png'%}" alt="logo">
 </a>
@@ -9,10 +9,12 @@
         {% if user.is_authenticated %}
             <a class="cart-info" href="{% url 'shopcart:cart' %}">
                 <img width="15px" height="15px " src="{% static 'img/shopping-cart.svg' %}" alt="cart">
-                {%if user.Cart.first and user.Cart.first.total_quantity > 0%}
-                       ({{ user.Cart.first.total_quantity }}) -  {{ user.Cart.first.total_cost }} &#165;
+                {% with user|shopcart_status as cart_info %}
+                {% if cart_info is not None %}
+                    {{ cart_info }} &#165;&nbsp;
                 {% endif %}
-                &nbsp;Shop cart
+                Shop cart
+                {% endwith %}
             </a>
         {% endif %}
     <ul class="auth">
@@ -36,18 +38,22 @@
     </div>
     <ul class="main-menu">
     {% for item in menu_items %}
-        <li class="menu-item
-            {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
-                menu-active
-            {% endif %}">
-            <a href="{% url item.link %}"
-               class="menu-item
-               {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
+        {%if not user.is_superuser and item.name == 'Admin' %}
+
+        {% else %}
+            <li class="menu-item
+                {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
                     menu-active
-               {% endif %}">
-                {{ item.name|title }}
-            </a>
-        </li>
+                {% endif %}">
+                <a href="{% url item.link %}"
+                   class="menu-item
+                   {% if item.link == request.resolver_match.view_name or request.resolver_match.namespace == item.namespace %}
+                        menu-active
+                   {% endif %}">
+                    {{ item.name|title }}
+                </a>
+            </li>
+        {%endif%}
     {% endfor %}
 </ul>
 </div>

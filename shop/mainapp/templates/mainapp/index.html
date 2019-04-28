@@ -7,7 +7,7 @@
             <a href="{% url 'catalog:product' product.id %}">
                 <img class="img-preview" src="{{ product.image.url }}" alt="product image" title="{{ product.name }}">
                 <div class="ctg-item-name">
-                    <p>{{ item.name }}</p>
+                    <p>{{ product.name }}</p>
                     <a class="ctg-buy" href="{%url 'shopcart:add' product.id%}"></a>
                 </div>
 
