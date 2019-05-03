@@ -1,7 +1,10 @@
+import random
+import hashlib
+
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 from django.forms import forms
 
-from .models import ShopUser
+from .models import ShopUser, UserActivation
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -22,6 +25,20 @@ class ShopUserRegisterForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
             field.help_text = ''
+
+    def save(self, commit=True):
+        user = super(ShopUserRegisterForm, self).save()
+        user.is_active = False
+        user.save()
+
+        salt = hashlib.sha1(str(random.random()).encode('utf8')).hexdigest()[:6]
+
+        user_activation = UserActivation()
+        user_activation.user = user
+        user_activation.code = hashlib.sha1((user.email + salt).encode('utf8')).hexdigest()
+        user_activation.save()
+
+        return user
 
     def clean_age(self):
         data = self.cleaned_data['age']

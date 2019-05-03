@@ -8,22 +8,14 @@ from mainapp.models import Product
 from .models import ShopCart
 
 
-def base():
-    return {'menu_items': [
-        {'name': 'Главная', 'link': 'index'},
-        {'name': 'Каталог', 'link': 'catalog:index', 'namespace': 'catalog'},
-        {'name': 'Контакты', 'link': 'contacts'},
-    ]}
-
-
 def update_header(request):
-    result = render_to_string('mainapp/includes/header.html', base(), request)
+    result = render_to_string('mainapp/includes/header.html', request=request)
     return JsonResponse({'result': result})
 
 
 @login_required
 def cart(request):
-    context = base()
+    context = dict()
     context['cart_items'] = ShopCart.objects.filter(user=request.user).select_related('product').all()
     context['total_cost'] = sum(list(map(lambda x: x.product_cost, context['cart_items'])))
     return render(request, 'shopcartapp/cart.html', context=context)
