@@ -105,8 +105,15 @@ class IndexView(SUBaseView, TemplateView):
 class UsersCreateView(SUBaseView, CreateView):
     model = ShopUser
     template_name = 'adminapp/create_page.html'
-    fields = ['username', 'email', 'password', 'age', 'is_staff', 'is_superuser']
+    fields = ['username', 'email', 'password', 'age']
     success_url = reverse_lazy('admin_custom:read_user')
+    
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        password = form.cleaned_data['password']
+        user.set_password(password)
+        user.save()
+        return super(UsersCreateView, self).form_valid(form)
 
 
 class UsersReadView(SUBaseView, ListView):
@@ -117,7 +124,7 @@ class UsersReadView(SUBaseView, ListView):
 class UsersUpdateView(SUBaseView, UpdateView):
     model = ShopUser
     template_name = 'adminapp/update_page.html'
-    fields = ['username', 'email', 'avatar', 'age', 'is_staff', 'is_superuser']
+    fields = ['username', 'email', 'avatar', 'age']
     success_url = reverse_lazy('admin_custom:read_user')
 
 

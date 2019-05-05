@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.files import File
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth
 from django.urls import reverse
@@ -10,19 +11,22 @@ from .models import *
 
 
 def login(request):
-    login_form = ShopUserLoginForm(data=request.POST)
     next = request.GET['next'] if 'next' in request.GET.keys() else ''
-    if request.method == 'POST' and login_form.is_valid():
-        username = request.POST['username']
-        password = request.POST['password']
+    if request.method == 'POST':
+        login_form = ShopUserLoginForm(data=request.POST)
+        if login_form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
 
-        user = auth.authenticate(username=username, password=password)
-        if user and user.is_active:
-            auth.login(request, user)
-            if 'next' in request.POST.keys():
-                return HttpResponseRedirect(request.POST['next'])
-            else:
-                return HttpResponseRedirect(reverse('index'))
+            user = auth.authenticate(username=username, password=password)
+            if user and user.is_active:
+                auth.login(request, user)
+                if 'next' in request.POST.keys():
+                    return HttpResponseRedirect(request.POST['next'])
+                else:
+                    return HttpResponseRedirect(reverse('index'))
+    else:
+        login_form = ShopUserLoginForm()
     context = {
         'login_form': login_form,
         'next': next
@@ -41,7 +45,10 @@ def register(request):
         if register_form.is_valid():
             if not register_form.instance.avatar:
                 register_form.instance.avatar = ''
-            user = register_form.save()
+            user = register_form.save(False)
+            if 'avatar' in request.FILES:
+                user.avatar.save(f'{user.username}_avatar.jpg', File(request.FILES.get('avatar').file))
+            user.save()
             if send_verify_mail(user):
                 status = 'сообщение подтверждения отправлено'
             else:
@@ -58,14 +65,21 @@ def register(request):
 def edit(request):
     if request.method == 'POST':
         edit_form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
-        if edit_form.is_valid():
-            edit_form.save()
+        profile_form = ShopUserProfileEditForm(request.POST, request.FILES, instance=request.user.profile)
+        if edit_form.is_valid() and profile_form.is_valid():
+            # edit_form.save()
+            user = edit_form.save(False)
+            if 'avatar' in request.FILES:
+                user.avatar.save(f'{user.username}_avatar.jpg', File(request.FILES.get('avatar').file))
+            user.save()
             return HttpResponseRedirect(reverse('auth:view'))
-    else:
-        edit_form = ShopUserEditForm(instance=request.user)
+
+    edit_form = ShopUserEditForm(instance=request.user)
+    profile_form = ShopUserProfileEditForm(instance=request.user.profile)
 
     context = {
         'edit_form': edit_form,
+        'profile_form': profile_form,
         'is_edit': 'True',
     }
     return render(request, 'authapp/profile.html', context=context)
@@ -106,3 +120,7 @@ def verify(request, activation_key):
         print(f'error activation user : {e.args}')
 
     return render(request, 'authapp/verification.html', context={'status': status})
+
+
+def forbidden(request):
+    return render(request, 'authapp/errors/auth_forbidden.html')
