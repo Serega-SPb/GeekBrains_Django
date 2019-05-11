@@ -3,7 +3,7 @@
 {% block content %}
     <div class="content">
         <h2>Registration</h2>
-        <form class="reg-form" action="{%url 'auth:register' %}" method="post">
+        <form class="reg-form" action="{%url 'auth:register' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="reg-flds">
                 <div class="reg-fld">

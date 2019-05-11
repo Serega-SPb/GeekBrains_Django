@@ -505,6 +505,7 @@ p.capit-letter::first-letter{
     border-radius: 5px;
     background-image: url(../img/google.svg);
     background-repeat: no-repeat;
+    color: transparent;
 }
 
 .login-google:hover{
@@ -587,6 +588,18 @@ p.capit-letter::first-letter{
 .profile-edit:active{
     color: white;
     background-color: black;
+}
+
+.profile-ext{
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    width: 50%;
+}
+
+.profile-ext p{
+    display: flex;
+    margin: 5px;
 }
 
 .profile-btns {

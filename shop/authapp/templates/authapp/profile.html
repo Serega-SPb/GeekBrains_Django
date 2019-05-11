@@ -1,14 +1,14 @@
 {% extends 'mainapp/base.html' %}
-
+{% load static %}
 {% block content %}
     <div class="content">
 
-        <form action="{% url 'auth:edit' %}" method="post">
+        <form action="{% url 'auth:edit' %}" method="post" enctype="multipart/form-data">
             <div class="profile">
                 {% csrf_token %}
                 <div class="avatar-block">
                     {%if is_edit == 'True' %}
-                        <img class="avatar-img" src="{{ user.avatar.url }}" alt="avatar">
+                        <img id="img_id" class="avatar-img" src="{{ user.avatar.url }}" alt="avatar">
                         {{edit_form.avatar}}
                         {{edit_form.avatar.errors}}
                     {%else%}
@@ -44,6 +44,17 @@
                     </tbody>
                 </table>
             </div>
+            <div class="profile-ext">
+                {%if is_edit == 'True' %}
+                    {{profile_form.as_p}}
+                {%else%}
+                    <p>Tags: {{user.profile.tags_line}}</p>
+                    <p>About me:
+                        <p>{{user.profile.aboutMe}}</p>
+                    </p>
+                    <p>Gender: {{user.profile.gender}}</p>
+                {%endif%}
+            </div>
             <div class="profile-btns">
                 <a href="#" class="profile-edit" onclick="alert('Feature is not released')">Change password</a>
                 {%if is_edit == 'True' %}
@@ -57,4 +68,26 @@
         </form>
 
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.3.0.js' %}"></script>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            $('#id_avatar').attr('onchange','upload_img(this)')
+        }
+
+        function upload_img(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#img_id').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 {% endblock %}

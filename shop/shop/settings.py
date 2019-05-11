@@ -30,7 +30,7 @@ SECRET_KEY = config.get('main', 'secret')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config.getboolean('main', 'debug')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 INTERNAL_IPS = [
@@ -102,6 +103,7 @@ DATABASES = {
 AUTH_USER_MODEL = 'authapp.ShopUser'
 LOGIN_URL = 'auth:login'
 LOGIN_REDIRECT_URL = 'index'
+LOGIN_ERROR_URL = 'auth:forbidden'
 
 AUTHENTICATION_BACKENDS = [
  'social_core.backends.open_id.OpenIdAuth',
@@ -114,6 +116,21 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config.get('oauth2', 'google-id')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config.get('oauth2', 'google-secret')
+SOCIAL_AUTH_GOOGLE_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email']
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.create_user',
+    'authapp.pipeline.save_user_profile',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -170,4 +187,4 @@ EMAIL_USE_SSL = config.getboolean('email', 'use-ssl')
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-    EMAIL_FILE_PATH = 'tmp/email-messages/'
+    EMAIL_FILE_PATH = os.path.join(os.path.dirname(BASE_DIR), 'tmp', 'email-messages')

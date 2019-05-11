@@ -2,9 +2,9 @@ import random
 import hashlib
 
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
-from django.forms import forms
+from django.forms import forms, ModelForm
 
-from .models import ShopUser, UserActivation
+from .models import *
 
 
 class ShopUserLoginForm(AuthenticationForm):
@@ -62,3 +62,9 @@ class ShopUserEditForm(UserChangeForm):
         if data < 18:
             raise forms.ValidationError("Вы слишком молоды!")
         return data
+
+
+class ShopUserProfileEditForm(ModelForm):
+    class Meta:
+        model = ShopUserProfile
+        fields = ('tags_line', 'aboutMe', 'gender')
