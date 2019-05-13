@@ -1,12 +1,28 @@
 {% extends 'adminapp/base.html' %}
-
+{% load static %}
 {% block content %}
     <div class="content">
         <h3>Create {{ subject }}</h3>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
+            {% if items %}
+                {{ items.management_form }}
+                <div id="items">
+                    <h4>Items</h4>
+                    {% for form in items.forms %}
+                        <div id="item">
+                            {{ form.as_p }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <button type="submit">Submit</button>
         </form>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.3.0.js' %}"></script>
+    <script src="{% static 'js/admin_scripts.js' %}"></script>
 {% endblock %}

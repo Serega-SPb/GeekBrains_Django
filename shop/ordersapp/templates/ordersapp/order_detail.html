@@ -1,0 +1,35 @@
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="content">
+       {% include 'ordersapp/includes/inc_order_summary.html' %}
+        <table class="cart-tbl">
+            <thead>
+                <tr>
+                    <th class="cart-col cart-col-num">#</th>
+                    <th class="cart-col cart-col-name">Name</th>
+                    <th class="cart-col cart-col-price">Price</th>
+                    <th class="cart-col cart-col-count">Quantity</th>
+                    <th class="cart-col cart-col-price">Total price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in object.orderitems.select_related %}
+                    <tr>
+                        <td class="cart-col cart-col-num">{{ forloop.counter }}</td>
+                        <td class="cart-col cart-col-name">
+                            <a href="{% url 'catalog:product' item.product.id %}">
+                                {{ item.product }}
+                            </a>
+                        </td>
+                        <td class="cart-col cart-col-price">{{ item.product.price }}</td>
+                        <td class="cart-col cart-col-count">{{ item.quantity }}</td>
+                        <td class="cart-col cart-col-price">{{ item.get_product_cost }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+       {% include 'ordersapp/includes/inc_order_actions.html' %}
+    </div>
+{% endblock %}

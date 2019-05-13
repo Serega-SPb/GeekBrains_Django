@@ -27,11 +27,12 @@ urlpatterns = [
     url('^auth/', include('authapp.urls', namespace='auth')),
     url('^auth/', include('social_django.urls', namespace='social')),
     url('^shopcart/', include('shopcartapp.urls', namespace='shopcart')),
+    url('^orders/', include('ordersapp.urls', namespace='orders')),
     url('contacts', mainapp.contacts, name='contacts'),
     url('^admin_custom/', include('adminapp.urls', namespace='admin_custom')),
 ]
 
 if settings.DEBUG:
-    import debug_toolbar
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns.append(url('^__debug__/', include(debug_toolbar.urls)))
+    # import debug_toolbar
+    # urlpatterns.append(url('^__debug__/', include(debug_toolbar.urls)))

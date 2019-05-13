@@ -58,8 +58,8 @@
             <div class="profile-btns">
                 <a href="#" class="profile-edit" onclick="alert('Feature is not released')">Change password</a>
                 {%if is_edit == 'True' %}
-                    <button type="submit" class="profile-edit">Save profile</button>
-                    <button type="reset" class="profile-edit">Reset</button>
+                    <input type="submit" class="profile-edit" value="Save profile">
+                    <input type="reset" class="profile-edit" value="Reset">
                     <a href="{% url 'auth:view' %}" class="profile-edit">Back</a>
                 {%else%}
                     <a href="{% url 'auth:edit' %}" class="profile-edit">Edit profile</a>

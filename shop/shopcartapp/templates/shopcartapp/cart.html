@@ -5,7 +5,7 @@
         <h2 class="cart-header">Shopping cart</h2>
         {%if cart_items|length > 0 %}
         <table id="table-cart" class="cart-tbl">
-            <tbody>
+            <thead>
                 <tr>
                     <th class="cart-col cart-col-num">#</th>
                     <th class="cart-col cart-col-name">Name</th>
@@ -13,6 +13,8 @@
                     <th class="cart-col cart-col-price">Price</th>
                     <th class="cart-col cart-col-price">Total price</th>
                 </tr>
+            </thead>
+            <tbody>
                 {%for item in cart_items%}
                     <tr id="{{ item.product.id}}">
                         <td class="cart-col cart-col-num">{{ forloop.counter }}</td>
@@ -39,6 +41,7 @@
         </table>
         <p class="cart-total-price">
            <b>Total:&nbsp;</b><span id="total-price">{{ total_cost }}</span>&nbsp;&#165;
+            <a class="cart-checkout" href="{% url 'orders:order_create' %}">Checkout</a>
         </p>
         {% else %}
             <p class="cart-empty">EMPTY</p>
