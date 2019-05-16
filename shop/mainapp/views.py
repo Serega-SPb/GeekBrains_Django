@@ -1,6 +1,18 @@
 import random
+
+from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from .models import *
+
+
+def get_product_price(request):
+    id = request.GET.get('id')
+    price = Product.objects.get(id=id).price
+    result = {
+        'id': id,
+        'price': price
+    }
+    return JsonResponse(result)
 
 
 def main(request):

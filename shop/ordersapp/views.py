@@ -1,12 +1,16 @@
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import HttpResponseNotFound, JsonResponse
 from django.shortcuts import get_object_or_404, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.db import transaction
-
+from django.dispatch import receiver
+from django.db.models.signals import pre_save, pre_delete
 from django.forms import inlineformset_factory
 
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 
+from shopcartapp.models import ShopCart
 from .models import Order, OrderItem
 from .forms import OrderItemForm
 
@@ -21,14 +25,37 @@ def order_forming_complete(request, pk):
     return HttpResponseRedirect(reverse('ordersapp:orders_list'))
 
 
-class OrderList(ListView):
+@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save, sender=ShopCart)
+def product_quantity_update_save(sender, update_fields, instance, **kwargs):
+    if update_fields is 'quantity' or 'product':
+        if instance.pk:
+            instance.product.quantity -= instance.quantity - sender.objects.get(id=instance.pk).quantity
+        else:
+            instance.product.quantity -= instance.quantity
+        instance.product.save()
+
+
+@receiver(pre_delete, sender=OrderItem)
+@receiver(pre_delete, sender=ShopCart)
+def product_quantity_update_delete(sender, instance, **kwargs):
+    instance.product.quantity += instance.quantity
+    instance.product.save()
+
+
+class AUBaseView(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated
+
+
+class OrderList(AUBaseView, ListView):
     model = Order
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
 
 
-class OrderItemsCreate(CreateView):
+class OrderItemsCreate(AUBaseView, CreateView):
     model = Order
     fields = []
     success_url = reverse_lazy('orders:orders_list')
@@ -47,6 +74,8 @@ class OrderItemsCreate(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = cart_items[num].product
                     form.initial['quantity'] = cart_items[num].quantity
+                    form.initial['price'] = cart_items[num].product.price
+
             else:
                 formset = order_formset()
 
@@ -70,7 +99,7 @@ class OrderItemsCreate(CreateView):
         return super().form_valid(form)
 
 
-class OrderItemsUpdate(UpdateView):
+class OrderItemsUpdate(AUBaseView, UpdateView):
     model = Order
     fields = []
     success_url = reverse_lazy('orders:orders_list')
@@ -82,7 +111,12 @@ class OrderItemsUpdate(UpdateView):
         if self.request.POST:
             data['orderitems'] = order_formset(self.request.POST, instance=self.object)
         else:
-            data['orderitems'] = order_formset(instance=self.object)
+            formset = order_formset(instance=self.object)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
+            data['orderitems'] = formset
+
         return data
 
     def form_valid(self, form):
@@ -95,13 +129,29 @@ class OrderItemsUpdate(UpdateView):
                 orderitems.instance = self.object
                 orderitems.save()
 
+        if self.object.get_total_cost() == 0:
+            self.object.delete()
+
         return super().form_valid(form)
 
 
-class OrderDelete(DeleteView):
+class OrderDelete(AUBaseView, DeleteView):
     model = Order
     success_url = reverse_lazy('ordersapp:orders_list')
 
+    def post(self, request, *args, **kwargs):
+        answer = request.POST.get('answer')
+        if not answer:
+            return HttpResponseNotFound()
 
-class OrderRead(DetailView):
+        subject = self.model.objects.filter(id=kwargs['pk']).first()
+
+        if answer == 'удалить':
+            subject.is_active = False
+            subject.save()
+
+        return HttpResponseRedirect(self.success_url)
+
+
+class OrderRead(AUBaseView, DetailView):
     model = Order

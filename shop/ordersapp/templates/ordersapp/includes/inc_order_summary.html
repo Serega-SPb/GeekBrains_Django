@@ -4,7 +4,12 @@
         <p>от {{ object.created|date:"d/m/Y" }} (обновлен: {{ object.updated|date:"d/m/Y" }})</p>
         <p>Статус: <b>{{ object.get_status_display }}</b></p>
         <hr>
-        <p>Количество товаров: {{ object.get_total_quantity }} (общая стоимость: {{ object.get_total_cost }} &#165;)</p>
+        <p>
+            Количество товаров:
+            <span id="total_quantity">{{ object.get_total_quantity }}</span>
+            (общая стоимость:
+            <span id="total_cost">{{ object.get_total_cost }}</span>
+            &#165;)</p>
     {% else %}
         <h3>Новый заказ</h3>
         <p>заказчик:

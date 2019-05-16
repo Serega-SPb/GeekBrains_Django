@@ -3,7 +3,9 @@
         <a class="order-action-btn" href="{% url 'ordersapp:order_forming_complete' object.pk %}">
            совершить покупку
         </a>
-        <a class="order-action-btn" href="{% url 'orders:order_update' object.pk %}">изменить</a>
+        {% if request.resolver_match.view_name != 'orders:order_update'%}
+            <a class="order-action-btn" href="{% url 'orders:order_update' object.pk %}">изменить</a>
+        {% endif %}
         <a class="order-action-btn" href="{% url 'orders:order_delete' object.pk %}">удалить</a>
     </div>
 {% endif %}

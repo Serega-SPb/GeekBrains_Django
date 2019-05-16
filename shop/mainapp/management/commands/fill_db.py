@@ -59,7 +59,8 @@ class Command(BaseCommand):
                               image=f'Product_images//{pr["img"]}',
                               price=pr['price'],
                               release=datetime.strptime(pr['Release Date'], '%b-%Y').date(),
-                              properties=properties)
+                              properties=properties,
+                              quantity=10)
             product.save()
 
         from authapp.models import ShopUser

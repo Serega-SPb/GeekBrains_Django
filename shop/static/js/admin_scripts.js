@@ -25,9 +25,3 @@ function apply_activation(sender){
         sender.text('Enabled')
     }
 }
-
-//function add_new_line()
-//{
-//    var item = $('#item').clone();
-//    $('#items').append(item);
-//}
