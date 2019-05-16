@@ -1,0 +1,15 @@
+{% if object.status == 'FM' %}
+    <div class="order-action-btns">
+        <a class="order-action-btn" href="{% url 'ordersapp:order_forming_complete' object.pk %}">
+           совершить покупку
+        </a>
+        <a class="order-action-btn" href="{% url 'orders:order_update' object.pk %}">изменить</a>
+        <a class="order-action-btn" href="{% url 'orders:order_delete' object.pk %}">удалить</a>
+    </div>
+{% endif %}
+<div class="order-redirect-btns">
+   <a class="order-action-btn" href="{% url 'orders:orders_list' %}">
+       к списку заказов
+   </a>
+    <a class="order-action-btn" href="{% url 'index' %}">на главную</a>
+</div>

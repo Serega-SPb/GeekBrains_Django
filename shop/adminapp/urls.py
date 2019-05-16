@@ -22,4 +22,9 @@ urlpatterns = [
     path('serials/update/<int:pk>', SerialsUpdateView.as_view(), name='update_serial'),
     path('serials/delete/<int:pk>', SerialsDeleteView.as_view(), name='delete_serial'),
 
+    path('orders/create', OrdersCreateView.as_view(), name='create_order'),
+    path('orders', OrdersReadView.as_view(), name='read_order'),
+    path('orders/update/<int:pk>', OrdersUpdateView.as_view(), name='update_order'),
+    path('orders/delete/<int:pk>', OrdersDeleteView.as_view(), name='delete_order'),
+
 ]

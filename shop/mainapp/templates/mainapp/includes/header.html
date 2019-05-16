@@ -20,7 +20,14 @@
     <ul class="auth">
         {% if user.is_authenticated %}
             <li class="auth-menu">
-                <a href="{% url 'auth:view' %}" class="auth-menu">{{ user.username|title }}</a>
+                <div class="dropdown">
+                    <a class="dropdown-head">{{ user.username|title }}</a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'auth:view' %}" class="auth-menu dropdown-items">Profile</a>
+                        <a href="{% url 'orders:orders_list' %}" class="auth-menu dropdown-items">Orders</a>
+                    </div>
+                </div>
+
             </li>
             <li class="auth-menu">
                 <a href="{% url 'auth:logout' %}" class="auth-menu">Log out</a>

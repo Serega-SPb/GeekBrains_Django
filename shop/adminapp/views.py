@@ -1,17 +1,22 @@
+from django.db import transaction
+from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin
 
+from adminapp.forms import *
 from authapp.models import ShopUser
-from mainapp.models import Product, Serial
+from mainapp.models import *
+from ordersapp.models import *
 
 MENU_ITEMS = [
     {'name': 'Main', 'link': 'admin_custom:index', 'namespace': 'index'},
     {'name': 'Users', 'link': 'admin_custom:read_user', 'namespace': 'user'},
     {'name': 'Products', 'link': 'admin_custom:read_product', 'namespace': 'product'},
     {'name': 'Serials', 'link': 'admin_custom:read_serial', 'namespace': 'serial'},
+    {'name': 'Orders', 'link': 'admin_custom:read_order', 'namespace': 'order'},
 ]
 
 LINKS = [
@@ -30,12 +35,18 @@ LINKS = [
         'create': 'admin_custom:create_serial',
         'update': 'admin_custom:update_serial',
         'delete': 'admin_custom:delete_serial'},
+    {'name': 'Orders', 'namespace': 'order',
+        'view': 'admin_custom:read_order',
+        'create': 'admin_custom:create_order',
+        'update': 'admin_custom:update_order',
+        'delete': 'admin_custom:delete_order'},
 ]
 
 MODELS = {
     'user': ShopUser,
     'product': Product,
-    'serial': Serial
+    'serial': Serial,
+    'order': Order
 }
 
 
@@ -184,3 +195,69 @@ class SerialsDeleteView(SUBaseView, BaseDeleteView):
     model = Serial
     template_name = 'adminapp/delete_page.html'
 
+# ----------------Orders----------------
+
+
+class OrdersCreateView(SUBaseView, CreateView):
+    model = Order
+    template_name = 'adminapp/create_page.html'
+    form_class = OrderForm
+    success_url = reverse_lazy('admin_custom:read_order')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
+        formset = order_formset()
+        data['items'] = formset
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        orderitems = context['items']
+
+        with transaction.atomic():
+            self.object = form.save()
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+
+        return super().form_valid(form)
+
+
+class OrdersReadView(SUBaseView, ListView):
+    model = Order
+    template_name = 'adminapp/read_page.html'
+
+
+class OrdersUpdateView(SUBaseView, UpdateView):
+    model = Order
+    template_name = 'adminapp/update_page.html'
+    form_class = OrderForm
+    success_url = reverse_lazy('admin_custom:read_order')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
+
+        if self.request.POST:
+            data['items'] = order_formset(self.request.POST, instance=self.object)
+        else:
+            data['items'] = order_formset(instance=self.object)
+        return data
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        orderitems = context['items']
+
+        with transaction.atomic():
+            self.object = form.save()
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+
+        return super().form_valid(form)
+
+
+class OrdersDeleteView(SUBaseView, BaseDeleteView):
+    model = Order
+    template_name = 'adminapp/delete_page.html'

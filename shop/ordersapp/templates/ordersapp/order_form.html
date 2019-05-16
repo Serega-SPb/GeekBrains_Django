@@ -1,0 +1,44 @@
+
+{% extends "mainapp/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="content">
+       {% include 'ordersapp/includes/inc_order_summary.html' %}
+       <form action="" method="post">
+           {% csrf_token %}
+           {{ form.as_p }}
+           <table class="cart-tbl">
+               {{ orderitems.management_form }}
+               {% for form in orderitems.forms %}
+                   {% if forloop.first %}
+                       <thead>
+                       <tr>
+                           {% for field in form.visible_fields %}
+                               <th class="cart-col">
+                                   {{ field.label|capfirst }}
+                               </th>
+                           {% endfor %}
+                       </tr>
+                       </thead>
+                   {% endif %}
+                   <tr>
+                       {% for field in form.visible_fields %}
+                           <td class="cart-col">
+                               {% if forloop.first %}
+                                   {% for hidden in form.hidden_fields %}
+                                       {{ hidden }}
+                                   {% endfor %}
+                               {% endif %}
+                               {{ field.errors.as_ul }}
+                               {{ field }}
+                           </td>
+                       {% endfor %}
+                   </tr>
+               {% endfor %}
+           </table>
+           <input class="order-action-btn" type="submit" value="сохранить">
+           {% include 'ordersapp/includes/inc_order_actions.html' %}
+       </form>
+   </div>
+{% endblock %}

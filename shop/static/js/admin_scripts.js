@@ -8,7 +8,7 @@ window.onload = function () {
         $.ajax({
             url: `/admin_custom/activation?ns=${ns}&id=${s_id}`,
         })
-    })
+    });
 }
 
 function apply_activation(sender){
@@ -25,3 +25,9 @@ function apply_activation(sender){
         sender.text('Enabled')
     }
 }
+
+//function add_new_line()
+//{
+//    var item = $('#item').clone();
+//    $('#items').append(item);
+//}

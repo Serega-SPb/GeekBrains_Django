@@ -1,0 +1,55 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="content">
+       <h2 class="cart-header">
+           Ваши заказы,
+           {% if user.first_name %}
+               {{ user.first_name|title}}
+           {% else %}
+               Пользователь
+           {% endif %}
+       </h2>
+        {%if object_list|length > 0 %}
+        <table class="cart-tbl">
+           <thead>
+             <tr>
+               <th class="cart-col">ID</th>
+               <th class="cart-col">Создан</th>
+               <th class="cart-col">Обновлен</th>
+               <th class="cart-col">Статус</th>
+             </tr>
+           </thead>
+           <tbody>
+               {% for item in object_list %}
+                   {% if item.is_active %}
+                   <tr>
+                       <td class="cart-col">{{ item.pk }}</td>
+                       <td class="cart-col">{{ item.created|date:"Y-m-d H:i:s" }}</td>
+                       <td class="cart-col">{{ item.updated|date:"Y-m-d H:i:s" }}</td>
+                       <td class="cart-col">{{ item.get_status_display }}</td>
+                       <td class="cart-col cart-col-remove">
+                           <a class="order-btn order-view-btn" href="{% url 'orders:order_read' item.pk %}"></a>
+                       </td>
+                       {% if item.status == 'FM' %}
+                           <td class="cart-col cart-col-remove">
+                             <a class="order-btn order-edit-btn" href="{% url 'orders:order_update' item.pk %}"></a>
+                           </td>
+                           <td class="cart-col cart-col-remove">
+                             <a class="cart-remove" href="{% url 'orders:order_delete' item.pk %}">X</a>
+                           </td>
+                       {% endif %}
+                   </tr>
+                   {% endif %}
+               {% endfor %}
+           </tbody>
+        </table>
+        {% else %}
+        <p class="cart-empty">EMPTY</p>
+        {% endif %}
+        <div class="order-redirect-btns">
+            <a class="order-action-btn" href="{% url 'orders:order_create' %}">новый</a>
+            <a class="order-action-btn" href="{% url 'index' %}">на главную</a>
+        </div>
+    </div>
+{% endblock %}

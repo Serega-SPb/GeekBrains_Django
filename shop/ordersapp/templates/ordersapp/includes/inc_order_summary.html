@@ -1,0 +1,18 @@
+<div>
+    {% if object %}
+        <h3>Заказ № {{ object.pk }}</h3>
+        <p>от {{ object.created|date:"d/m/Y" }} (обновлен: {{ object.updated|date:"d/m/Y" }})</p>
+        <p>Статус: <b>{{ object.get_status_display }}</b></p>
+        <hr>
+        <p>Количество товаров: {{ object.get_total_quantity }} (общая стоимость: {{ object.get_total_cost }} &#165;)</p>
+    {% else %}
+        <h3>Новый заказ</h3>
+        <p>заказчик:
+            {% if user.last_name or user.first_name %}
+                {{ user.last_name }} {{ user.first_name }}
+            {% else %}
+                {{ user|title }}
+            {% endif %}
+        </p>
+{% endif %}
+</div>

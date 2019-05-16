@@ -22,4 +22,5 @@ Fixes:
 Примечание:
 - сделал загрузку аватарки юзера из профиля google в media/users_avatars/\<username>_avatar.jpg
 
-
+## Homework 3
+Все сделано
