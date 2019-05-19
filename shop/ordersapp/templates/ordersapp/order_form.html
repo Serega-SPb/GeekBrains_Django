@@ -5,9 +5,8 @@
 {% block content %}
     <div class="content">
        {% include 'ordersapp/includes/inc_order_summary.html' %}
-       <form action="" method="post">
+       <form id="order_form" action="" method="post">
            {% csrf_token %}
-           {{ form.as_p }}
            <table class="cart-tbl">
                {{ orderitems.management_form }}
                {% for form in orderitems.forms %}
@@ -22,16 +21,24 @@
                        </tr>
                        </thead>
                    {% endif %}
-                   <tr>
+                   <tr class="formset">
                        {% for field in form.visible_fields %}
-                           <td class="cart-col">
+                           <td class="cart-col formset_td">
                                {% if forloop.first %}
                                    {% for hidden in form.hidden_fields %}
                                        {{ hidden }}
                                    {% endfor %}
                                {% endif %}
                                {{ field.errors.as_ul }}
-                               {{ field }}
+                               {% if field.name != 'price' %}
+                                   {{ field }}
+                               {% else %}
+                                   {% if field.value %}
+                                       <span id="price" class="order-price">
+                                         {{ field.value }}
+                                       </span>
+                                   {% endif %}
+                               {% endif %}
                            </td>
                        {% endfor %}
                    </tr>
@@ -41,4 +48,10 @@
            {% include 'ordersapp/includes/inc_order_actions.html' %}
        </form>
    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.3.0.js' %}"></script>
+    <script src="{% static 'dynamic_formsets/jquery.formset.js' %}"></script>
+    <script src="{% static 'js/orders_scripts.js' %}"></script>
 {% endblock %}

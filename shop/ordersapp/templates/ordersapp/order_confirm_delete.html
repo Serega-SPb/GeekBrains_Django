@@ -8,7 +8,7 @@
         <div class="order-action-btns">
             <form action="{% url 'ordersapp:order_delete' object.pk %}" method="post">
                 {% csrf_token %}
-                <input class="order-action-btn" type="submit" value="удалить">
+                <input class="order-action-btn" name="answer" type="submit" value="удалить">
             </form>
             <a class="order-action-btn" href="{% url 'ordersapp:orders_list' %}">отмена</a>
         </div>

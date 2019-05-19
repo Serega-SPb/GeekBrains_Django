@@ -102,9 +102,7 @@ class BaseDeleteView(DeleteView):
         if answer == 'Yes':
             subject.delete()
 
-        cur_link = self.request.resolver_match.view_name
-        redirect = [x for x in LINKS if x['delete'] == cur_link][0]['view']
-        return HttpResponseRedirect(reverse(redirect))
+        return HttpResponseRedirect(self.success_url)
 
 
 class IndexView(SUBaseView, TemplateView):
@@ -142,6 +140,7 @@ class UsersUpdateView(SUBaseView, UpdateView):
 class UsersDeleteView(SUBaseView, BaseDeleteView):
     model = ShopUser
     template_name = 'adminapp/delete_page.html'
+    success_url = reverse_lazy('admin_custom:read_user')
 
 # ----------------Products----------------
 
@@ -168,6 +167,7 @@ class ProductsUpdateView(SUBaseView, UpdateView):
 class ProductsDeleteView(SUBaseView, BaseDeleteView):
     model = Product
     template_name = 'adminapp/delete_page.html'
+    success_url = reverse_lazy('admin_custom:read_product')
 
 # ----------------Serials----------------
 
@@ -194,6 +194,7 @@ class SerialsUpdateView(SUBaseView, UpdateView):
 class SerialsDeleteView(SUBaseView, BaseDeleteView):
     model = Serial
     template_name = 'adminapp/delete_page.html'
+    success_url = reverse_lazy('admin_custom:read_serial')
 
 # ----------------Orders----------------
 
@@ -261,3 +262,4 @@ class OrdersUpdateView(SUBaseView, UpdateView):
 class OrdersDeleteView(SUBaseView, BaseDeleteView):
     model = Order
     template_name = 'adminapp/delete_page.html'
+    success_url = reverse_lazy('admin_custom:read_order')

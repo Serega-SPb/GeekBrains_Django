@@ -43,6 +43,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='Product_images')
     price = models.DecimalField(max_digits=7, decimal_places=2)
     release = models.DateField()
+    quantity = models.PositiveIntegerField(default=0)
     properties = models.OneToOneField(ProductProperties, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
 

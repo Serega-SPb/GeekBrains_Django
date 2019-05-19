@@ -47,10 +47,6 @@ class Order(models.Model):
         items = self.orderitems.select_related('product')
         return sum([i.quantity * i.product.price for i in items])
 
-    def delete(self):
-        self.is_active = False
-        self.save()
-
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="orderitems")
