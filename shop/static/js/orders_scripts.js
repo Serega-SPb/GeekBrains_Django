@@ -80,6 +80,7 @@ window.onload = function () {
     function deleteOrderItem(row)
     {
         $forms = $($forms).not(row);
+        row.remove();
         updateSummary();
     }
 };
