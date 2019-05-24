@@ -5,7 +5,7 @@ from django.db import models
 
 class Brand(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, db_index=True)
 
     def __str__(self):
         return self.name
@@ -13,7 +13,7 @@ class Brand(models.Model):
 
 class Serial(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, db_index=True)
 
     def __str__(self):
         return self.name
@@ -45,10 +45,13 @@ class Product(models.Model):
     release = models.DateField()
     quantity = models.PositiveIntegerField(default=0)
     properties = models.OneToOneField(ProductProperties, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, db_index=True)
 
     def __str__(self):
         return self.name
 
+    @staticmethod
+    def get_items():
+        return Product.objects.filter(is_active=True).order_by('name')
 
 

@@ -10,6 +10,7 @@ from django.forms import inlineformset_factory
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 
+from mainapp.models import Product
 from shopcartapp.models import ShopCart
 from .models import Order, OrderItem
 from .forms import OrderItemForm
@@ -62,17 +63,19 @@ class OrderItemsCreate(AUBaseView, CreateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
+        order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=0)
 
         if self.request.POST:
             formset = order_formset(self.request.POST)
         else:
-            cart_items = self.request.user.Cart.select_related('product').all()
+            cart_items = self.request.user.Cart.select_related('product')
             if len(cart_items):
+                products = list(Product.get_items().select_related().values('id', 'name'))
                 order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=len(cart_items))
                 formset = order_formset()
                 for num, form in enumerate(formset.forms):
                     form.initial['product'] = cart_items[num].product
+                    form.fields['product'].choices = [('', '------')] + [(p['id'], p['name']) for p in products]
                     form.initial['quantity'] = cart_items[num].quantity
                     form.initial['price'] = cart_items[num].product.price
 
@@ -106,15 +109,18 @@ class OrderItemsUpdate(AUBaseView, UpdateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
+        order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=0)
 
         if self.request.POST:
             data['orderitems'] = order_formset(self.request.POST, instance=self.object)
         else:
-            formset = order_formset(instance=self.object)
+            queryset = self.object.orderitems.select_related()
+            formset = order_formset(instance=self.object, queryset=queryset)
+            products = list(Product.get_items().select_related().values('id', 'name'))
             for form in formset.forms:
                 if form.instance.pk:
                     form.initial['price'] = form.instance.product.price
+                    form.fields['product'].choices = [('', '------')] + [(p['id'], p['name']) for p in products]
             data['orderitems'] = formset
 
         return data
