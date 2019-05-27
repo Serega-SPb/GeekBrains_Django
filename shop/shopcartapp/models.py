@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django.utils.functional import cached_property
+
 from mainapp.models import Product
 
 
@@ -9,7 +11,11 @@ class ShopCart(models.Model):
     quantity = models.PositiveIntegerField(default=0)
 
     def get_all(self):
-        return self.user.Cart.select_related('product').all()
+        return self.user.Cart.select_related()
+
+    @cached_property
+    def get_all_cached(self):
+        return self.user.Cart.select_related()
 
     @property
     def product_cost(self):
@@ -17,13 +23,13 @@ class ShopCart(models.Model):
 
     @property
     def total_quantity(self):
-        _items = self.get_all()
+        _items = self.get_all_cached
         _total_quantity = sum(list(map(lambda x: x.quantity, _items)))
         return _total_quantity
 
     @property
     def total_cost(self):
-        _items = self.get_all()
+        _items = self.get_all_cached
         _total_cost = sum(list(map(lambda x: x.product_cost, _items)))
         return _total_cost
 

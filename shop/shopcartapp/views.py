@@ -16,7 +16,7 @@ def update_header(request):
 @login_required
 def cart(request):
     context = dict()
-    context['cart_items'] = ShopCart.objects.filter(user=request.user).select_related('product').all()
+    context['cart_items'] = request.user.Cart.select_related('product')
     context['total_cost'] = sum(list(map(lambda x: x.product_cost, context['cart_items'])))
     return render(request, 'shopcartapp/cart.html', context=context)
 

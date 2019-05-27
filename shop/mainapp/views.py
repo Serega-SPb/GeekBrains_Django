@@ -1,7 +1,9 @@
 import random
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotFound
 from django.shortcuts import render, get_object_or_404
+from django.template.loader import render_to_string
+
 from .models import *
 
 
@@ -17,7 +19,7 @@ def get_product_price(request):
 
 def main(request):
     context = {
-        'product': random.sample(list(Product.get_items()), 1)[0]
+        'product': random.sample(list(get_products()), 1)[0]
     }
     return render(request, 'mainapp/index.html', context=context)
 
@@ -30,11 +32,22 @@ def catalog(request, cat_id=None):
     if cat_id and int(cat_id) > 0:
         cat = get_object_or_404(Serial, id=cat_id)
         props = ProductProperties.objects.filter(serial=cat).all()
-        context['items'] = Product.get_items().filter(properties__in=props).all()
+        context['items'] = get_products().filter(properties__in=props).all()
     else:
-        context['items'] = Product.get_items()
+        context['items'] = get_products()
         context['hot_items'] = random.sample(list(context['items']), 3)[:3]
     return render(request, 'mainapp/catalog.html', context=context)
+
+
+def catalog_ajax(request):
+    cat_id = int(request.GET.get('cat_id'))
+    if cat_id and int(cat_id) > 0:
+        cat = get_object_or_404(Serial, id=cat_id)
+        context = {'items': get_products().filter(properties__in=ProductProperties.objects.filter(serial=cat))}
+    else:
+        context = {'items': get_products()}
+    result = render_to_string('mainapp/includes/catalog_content.html', request=request, context=context)
+    return JsonResponse({'result': result})
 
 
 def get_props(prop):
@@ -59,7 +72,7 @@ def get_product_info(product):
 
 
 def product(request, id):
-    _product = Product.get_items().filter(id=id).first()
+    _product = get_products().filter(id=id).first()
     context = get_product_info(_product)
     return render(request, 'mainapp/product.html', context=context)
 

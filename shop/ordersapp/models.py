@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 
 from mainapp.models import Product
 
@@ -37,12 +38,14 @@ class Order(models.Model):
     def __str__(self):
         return f'ID - {self.id} | user - {self.user}'
 
+    @cached_property
     def get_total_quantity(self):
         return sum(self.orderitems.all().values_list('quantity', flat=True))
 
     def get_product_type_quantity(self):
         return self.orderitems.count()
 
+    @cached_property
     def get_total_cost(self):
         items = self.orderitems.select_related('product')
         return sum([i.quantity * i.product.price for i in items])

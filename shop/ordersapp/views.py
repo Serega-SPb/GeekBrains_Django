@@ -10,7 +10,7 @@ from django.forms import inlineformset_factory
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.views.generic.detail import DetailView
 
-from mainapp.models import Product
+from mainapp.models import Product, get_products
 from shopcartapp.models import ShopCart
 from .models import Order, OrderItem
 from .forms import OrderItemForm
@@ -63,14 +63,14 @@ class OrderItemsCreate(AUBaseView, CreateView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=0)
+        order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
 
         if self.request.POST:
             formset = order_formset(self.request.POST)
         else:
             cart_items = self.request.user.Cart.select_related('product')
             if len(cart_items):
-                products = list(Product.get_items().select_related().values('id', 'name'))
+                products = list(get_products().values('id', 'name'))
                 order_formset = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=len(cart_items))
                 formset = order_formset()
                 for num, form in enumerate(formset.forms):
@@ -116,7 +116,7 @@ class OrderItemsUpdate(AUBaseView, UpdateView):
         else:
             queryset = self.object.orderitems.select_related()
             formset = order_formset(instance=self.object, queryset=queryset)
-            products = list(Product.get_items().select_related().values('id', 'name'))
+            products = list(get_products().values('id', 'name'))
             for form in formset.forms:
                 if form.instance.pk:
                     form.initial['price'] = form.instance.product.price

@@ -1,36 +1,37 @@
 {% extends 'mainapp/base.html' %}
-
+{% load static %}
 {% block content %}
     <div class="content">
         <h2 class="ctg-header">{{ menu_items.1.name|title }}</h2>
         <ul class="categories">
             <li>
-                <a href="{% url 'catalog:filter' 0 %}"
+                <a href="{% url 'catalog:filter' 0 %}" id="0"
                    class="cat-link cat-bd {% if '0' in request.path %} cat-active cat-bd-active {% endif %}">
                     All
                 </a>
             </li>
             {% for cat in categories %}
                 <li>
-                    <a href="{% url 'catalog:filter' cat.id %}"
+                    <a href="{% url 'catalog:filter' cat.id %}" id="{{ cat.id }}"
                        class="cat-link cat-bd {% if cat.id|lower in request.path %} cat-active cat-bd-active {% endif %}">
                         {{ cat.name }}</a>
                 </li>
             {% endfor %}
         </ul>
         <div class="ctg-items">
-            {% for item in items %}
-                <div class="ctg-item">
-                    <a href="{% url 'catalog:product' item.id %}">
-                        <img class="img-preview" src="{{ item.image.url }}" alt="product image" title="{{ item.name }}">
-                        <div class="ctg-item-name">
-                            <p>{{ item.name }}</p>
-                            <a class="ctg-buy" href="{%url 'shopcart:add' item.id%}"></a>
-                        </div>
+            {% include 'mainapp/includes/catalog_content.html' %}
+<!--            {% for item in items %}-->
+<!--                <div class="ctg-item">-->
+<!--                    <a href="{% url 'catalog:product' item.id %}">-->
+<!--                        <img class="img-preview" src="{{ item.image.url }}" alt="product image" title="{{ item.name }}">-->
+<!--                        <div class="ctg-item-name">-->
+<!--                            <p>{{ item.name }}</p>-->
+<!--                            <a class="ctg-buy" href="{%url 'shopcart:add' item.id%}"></a>-->
+<!--                        </div>-->
 
-                    </a>
-                </div>
-            {% endfor %}
+<!--                    </a>-->
+<!--                </div>-->
+<!--            {% endfor %}-->
         </div>
         {% if  hot_items|length > 0 %}
         <h2 class="ctg-header">Hot products</h2>
@@ -50,4 +51,9 @@
         </div>
         {% endif %}
     </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/jquery-3.3.0.js' %}"></script>
+    <script src="{% static 'js/main_scripts.js' %}"></script>
 {% endblock %}
