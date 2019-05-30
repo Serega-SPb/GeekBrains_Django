@@ -44,7 +44,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     release = models.DateField()
     quantity = models.PositiveIntegerField(default=0)
-    properties = models.OneToOneField(ProductProperties, on_delete=models.CASCADE)
+    properties = models.OneToOneField(ProductProperties, on_delete=models.CASCADE, related_name='toProduct')
     is_active = models.BooleanField(default=True, db_index=True)
 
     def __str__(self):

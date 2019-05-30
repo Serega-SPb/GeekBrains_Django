@@ -5,6 +5,9 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
+from django.db.models import F, When, Case, DecimalField, IntegerField, Q
 
 from adminapp.forms import *
 from authapp.models import ShopUser
@@ -21,25 +24,25 @@ MENU_ITEMS = [
 
 LINKS = [
     {'name': 'Users', 'namespace': 'user',
-        'view': 'admin_custom:read_user',
-        'create': 'admin_custom:create_user',
-        'update': 'admin_custom:update_user',
-        'delete': 'admin_custom:delete_user'},
-    {'name': 'Products',  'namespace': 'product',
-        'view': 'admin_custom:read_product',
-        'create': 'admin_custom:create_product',
-        'update': 'admin_custom:update_product',
-        'delete': 'admin_custom:delete_product'},
+     'view': 'admin_custom:read_user',
+     'create': 'admin_custom:create_user',
+     'update': 'admin_custom:update_user',
+     'delete': 'admin_custom:delete_user'},
+    {'name': 'Products', 'namespace': 'product',
+     'view': 'admin_custom:read_product',
+     'create': 'admin_custom:create_product',
+     'update': 'admin_custom:update_product',
+     'delete': 'admin_custom:delete_product'},
     {'name': 'Serials', 'namespace': 'serial',
-        'view': 'admin_custom:read_serial',
-        'create': 'admin_custom:create_serial',
-        'update': 'admin_custom:update_serial',
-        'delete': 'admin_custom:delete_serial'},
+     'view': 'admin_custom:read_serial',
+     'create': 'admin_custom:create_serial',
+     'update': 'admin_custom:update_serial',
+     'delete': 'admin_custom:delete_serial'},
     {'name': 'Orders', 'namespace': 'order',
-        'view': 'admin_custom:read_order',
-        'create': 'admin_custom:create_order',
-        'update': 'admin_custom:update_order',
-        'delete': 'admin_custom:delete_order'},
+     'view': 'admin_custom:read_order',
+     'create': 'admin_custom:create_order',
+     'update': 'admin_custom:update_order',
+     'delete': 'admin_custom:delete_order'},
 ]
 
 MODELS = {
@@ -51,7 +54,6 @@ MODELS = {
 
 
 def activation_objects(request):
-
     ns = request.GET.get('ns')
     id = request.GET.get('id')
 
@@ -108,6 +110,7 @@ class BaseDeleteView(DeleteView):
 class IndexView(SUBaseView, TemplateView):
     template_name = 'adminapp/index.html'
 
+
 # ----------------Users----------------
 
 
@@ -116,7 +119,7 @@ class UsersCreateView(SUBaseView, CreateView):
     template_name = 'adminapp/create_page.html'
     fields = ['username', 'email', 'password', 'age']
     success_url = reverse_lazy('admin_custom:read_user')
-    
+
     def form_valid(self, form):
         user = form.save(commit=False)
         password = form.cleaned_data['password']
@@ -141,6 +144,7 @@ class UsersDeleteView(SUBaseView, BaseDeleteView):
     model = ShopUser
     template_name = 'adminapp/delete_page.html'
     success_url = reverse_lazy('admin_custom:read_user')
+
 
 # ----------------Products----------------
 
@@ -169,6 +173,7 @@ class ProductsDeleteView(SUBaseView, BaseDeleteView):
     template_name = 'adminapp/delete_page.html'
     success_url = reverse_lazy('admin_custom:read_product')
 
+
 # ----------------Serials----------------
 
 
@@ -186,15 +191,24 @@ class SerialsReadView(SUBaseView, ListView):
 
 class SerialsUpdateView(SUBaseView, UpdateView):
     model = Serial
+    form_class = SerialForm
     template_name = 'adminapp/update_page.html'
-    fields = ['name']
     success_url = reverse_lazy('admin_custom:read_serial')
+
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                Product.objects.filter(Q(properties__in=self.object.productproperties_set.all())).\
+                    update(price=F('price') * (1 - discount / 100))
+        return super().form_valid(form)
 
 
 class SerialsDeleteView(SUBaseView, BaseDeleteView):
     model = Serial
     template_name = 'adminapp/delete_page.html'
     success_url = reverse_lazy('admin_custom:read_serial')
+
 
 # ----------------Orders----------------
 
@@ -263,3 +277,18 @@ class OrdersDeleteView(SUBaseView, BaseDeleteView):
     model = Order
     template_name = 'adminapp/delete_page.html'
     success_url = reverse_lazy('admin_custom:read_order')
+
+
+@receiver(pre_save, sender=Serial)
+def product_is_active_update_serial_save(sender, instance, **kwargs):
+    if instance.pk:
+        Product.objects.filter(properties__in=instance.productproperties_set.all()).\
+            update(is_active=instance.is_active)
+        # with transaction.atomic():
+        #     props = instance.productproperties_set.all()
+        #     for p in props:
+        #         if not hasattr(p, 'toProduct'):
+        #             continue
+        #         prod = p.toProduct
+        #         prod.is_active = instance.is_active
+        #         prod.save()
