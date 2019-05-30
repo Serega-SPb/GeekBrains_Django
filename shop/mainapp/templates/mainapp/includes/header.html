@@ -11,7 +11,7 @@
                 <img width="15px" height="15px " src="{% static 'img/shopping-cart.svg' %}" alt="cart">
                 {% with user|shopcart_status as cart_info %}
                 {% if cart_info is not None %}
-                    {{ cart_info }} &#165;&nbsp;
+                    ({{ cart_info.quantity }}) {{ cart_info.product_cost }} &#165;&nbsp;
                 {% endif %}
                 Shop cart
                 {% endwith %}

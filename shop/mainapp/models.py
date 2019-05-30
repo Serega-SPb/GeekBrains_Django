@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.db import models
-
-# Create your models here.
+from django.core.cache import cache
 
 
 class Brand(models.Model):
@@ -52,6 +52,16 @@ class Product(models.Model):
 
     @staticmethod
     def get_items():
-        return Product.objects.filter(is_active=True).order_by('name')
+        return Product.objects.filter(is_active=True).order_by('name').select_related()
 
 
+def get_products():
+    if settings.LOW_CACHE:
+        key = 'products'
+        products = cache.get(key)
+        if products is None:
+            products = Product.get_items()
+            cache.set(key, products)
+        return products
+    else:
+        return Product.get_items()
