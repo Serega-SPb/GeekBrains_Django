@@ -1,4 +1,4 @@
 django-debug-toolbar==1.11.1
-django==3.2.25
+django==4.2.16
 social-auth-app-django==5.4.1
 pillow==10.3.0
